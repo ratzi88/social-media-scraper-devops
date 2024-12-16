@@ -122,3 +122,4 @@ resource "aws_instance" "vm_1b" {
 
   tags = var.tags
 }
+#test
