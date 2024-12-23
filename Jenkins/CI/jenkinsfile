@@ -64,7 +64,8 @@ pipeline{
             echo "========always========"
         }
         success{
-            echo "========pipeline executed successfully ========"
+            echo "========social-media-ci successfully ========"
+            build 'social-media-cd'
         }
         failure{
             echo "========pipeline execution failed========"
