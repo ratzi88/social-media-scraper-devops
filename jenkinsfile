@@ -16,13 +16,32 @@ pipeline{
                     echo "========always========"
                 }
                 success{
-                     sh "git rm -rf jenkinsfile"
-                     sh "git rm -rf README.md"
-                     sh "git rm -rf .git"
+                    dir("${env.BUILD_NUMBER}") {
+                        sh "git rm -rf jenkinsfile"
+                        sh "git rm -rf README.md"
+                        sh "git rm -rf .git"
+                    }
                 }
                 failure{
                     echo "========A execution failed========"
                 }
+            }
+        }
+        stage("A"){
+            steps{
+                echo "====++++executing A++++===="
+            }
+            post{
+                always{
+                    echo "====++++always++++===="
+                }
+                success{
+                    echo "====++++A executed successfully++++===="
+                }
+                failure{
+                    echo "====++++A execution failed++++===="
+                }
+        
             }
         }
     }
@@ -37,4 +56,5 @@ pipeline{
             echo "========pipeline execution failed========"
         }
     }
+    stages
 }
