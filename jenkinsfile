@@ -18,6 +18,7 @@ pipeline{
                 success{
                     dir("${env.BUILD_NUMBER}") {
                         sh "git rm -rf jenkinsfile"
+                        cleanWs()
                         // sh "git rm -rf README.md"
                         // sh "git rm -rf .git"
                     }
