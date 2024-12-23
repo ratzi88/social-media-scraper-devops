@@ -31,11 +31,17 @@ pipeline{
             steps{
                 sh "sudo apt update && sudo apt upgrade -y"
                 parallel{
-                    steps{
-                        echo "11111"
-                    }
-                    steps{
-                        echo "22222"
+                        stage("python installing"){
+                            steps{
+                                echo "11111"
+                            }
+                        }
+                        stage("Other installing"){
+                            steps{
+                                echo "11111"
+                            }
+                        }                        
+
                     }
                 }
             }
