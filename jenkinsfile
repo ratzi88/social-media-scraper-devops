@@ -56,5 +56,4 @@ pipeline{
             echo "========pipeline execution failed========"
         }
     }
-    stages
 }
