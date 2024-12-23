@@ -48,13 +48,13 @@ pipeline{
             }
         }
 
-        stage("Docker build"){
-            steps{
-                dir("${env.BUILD_NUMBER}/backend"){
-                    sh "docker build -t python-app ."
-                }
-            }
-        }
+        // stage("Docker build"){
+        //     steps{
+        //         dir("${env.BUILD_NUMBER}/backend"){
+        //             sh "docker build -t python-app ."
+        //         }
+        //     }
+        // }
 
 
 
