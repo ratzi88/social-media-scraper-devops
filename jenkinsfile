@@ -27,23 +27,24 @@ pipeline{
                 }
             }
         }
-        stage("Verifications"){
+        stage("apt update upgrade"){
             steps{
                 sh "sudo apt update && sudo apt upgrade -y"
                 }
         }
-        parallel{
-            stage("python installing"){
-                steps{
-                    echo "11111"
+        stage("Verifications"){
+            parallel{
+                stage("python installing"){
+                    steps{
+                        echo "11111"
+                    }
                 }
+                stage("Other installing"){
+                    steps{
+                        echo "11111"
+                    }
+                }                        
             }
-            stage("Other installing"){
-                steps{
-                    echo "11111"
-                }
-            }                        
-
         }
     }
     post{
