@@ -27,9 +27,9 @@ pipeline{
                 }
             }
         }
-        stage("A"){
+        stage("Verifications"){
             steps{
-                echo "====++++executing A++++===="
+                sh "sudo apt update && sudo apt upgrade -y"
             }
             post{
                 always{
