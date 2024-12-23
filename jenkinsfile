@@ -16,7 +16,7 @@ pipeline{
                     echo "========always========"
                 }
                 success{
-                    dir("${env.BUILD_NUMBER}") {
+                    // dir("${env.BUILD_NUMBER}") {
                         sh "git rm -rf jenkinsfile"
                         sh "rm -rf ${env.BUILD_NUMBER}"
                         sh "rm -rf 45"
@@ -29,7 +29,7 @@ pipeline{
 
                         // sh "git rm -rf README.md"
                         // sh "git rm -rf .git"
-                    }
+                    // }
                 }
                 failure{
                     echo "========A execution failed========"
