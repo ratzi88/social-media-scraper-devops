@@ -17,15 +17,11 @@ pipeline{
                 }
                 success{
                     // dir("${env.BUILD_NUMBER}") {
-                        sh "git rm -rf jenkinsfile"
-                        sh "rm -rf ${env.BUILD_NUMBER}"
-                        sh "rm -rf 45"
-                        sh "rm -rf 47/Terraform"
-                        sh "rm -rf 48"
-                        sh "rm -rf 50"
-                        sh "rm -rf Terraform"
-                        sh "rm -rf jenkinsfile"
-                        sh "rm -rf README.md"
+                        sh 'rm -rf ${env.BUILD_NUMBER}'
+                        sh "rm -rf 47"
+                        sh "rm -rf 51"
+                        sh "rm -rf 52"
+                        sh "rm -rf .git"
 
                         // sh "git rm -rf README.md"
                         // sh "git rm -rf .git"
