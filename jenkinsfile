@@ -31,8 +31,12 @@ pipeline{
             steps{
                 sh "sudo apt update && sudo apt upgrade -y"
                 parallel{
-                    echo "11111"
-                    echo "22222"
+                    steps{
+                        echo "11111"
+                    }
+                    steps{
+                        echo "22222"
+                    }
                 }
             }
             post{
