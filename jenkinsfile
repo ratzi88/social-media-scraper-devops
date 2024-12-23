@@ -16,16 +16,11 @@ pipeline{
                     echo "========always========"
                 }
                 success{
-                    // dir("${env.BUILD_NUMBER}") {
-                        sh 'rm -rf ${env.BUILD_NUMBER}'
-                        sh "rm -rf 47"
-                        sh "rm -rf 51"
-                        sh "rm -rf 52"
-                        sh "rm -rf .git"
+                    dir("${env.BUILD_NUMBER}") {
 
-                        // sh "git rm -rf README.md"
-                        // sh "git rm -rf .git"
-                    // }
+                        sh "git rm -rf README.md"
+                        sh "git rm -rf .git"
+                    }
                 }
                 failure{
                     echo "========A execution failed========"
