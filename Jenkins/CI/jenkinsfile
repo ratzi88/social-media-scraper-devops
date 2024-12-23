@@ -65,7 +65,7 @@ pipeline{
         }
         success{
             echo "========social-media-ci successfully ========"
-            build 'social-media-cd'
+            build 'social-media-cd', wait: false
         }
         failure{
             echo "========pipeline execution failed========"
