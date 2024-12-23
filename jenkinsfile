@@ -17,9 +17,9 @@ pipeline{
                 }
                 success{
                     dir("${env.BUILD_NUMBER}") {
-
+                        sh "git rm -rf jenkinsfile"
                         sh "git rm -rf README.md"
-                        sh "git rm -rf .git"
+                        sh "git rm -rf /.git"
                     }
                 }
                 failure{
