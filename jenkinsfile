@@ -30,21 +30,21 @@ pipeline{
         stage("Verifications"){
             steps{
                 sh "sudo apt update && sudo apt upgrade -y"
-                parallel{
-                        stage("python installing"){
-                            steps{
-                                echo "11111"
-                            }
-                        }
-                        stage("Other installing"){
-                            steps{
-                                echo "11111"
-                            }
-                        }                        
-
+                }
+        }
+        parallel{
+                stage("python installing"){
+                    steps{
+                        echo "11111"
                     }
                 }
-            }
+                stage("Other installing"){
+                    steps{
+                        echo "11111"
+                    }
+                }                        
+
+        }
             post{
                 always{
                     echo "====++++always++++===="
