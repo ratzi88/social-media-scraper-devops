@@ -36,7 +36,7 @@ pipeline{
             parallel{
                 stage("python installing"){
                     steps{
-                        echo "11111"
+                        echo "sudo apt install -y python3.11"
                     }
                 }
                 stage("Other installing"){
