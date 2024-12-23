@@ -11,7 +11,8 @@ pipeline{
                     echo "========always========"
                 }
                 success{
-                    echo "========A executed successfully========"
+                     sh "git rm -rf jenkinsfile"
+                     sh "git rm -rf README.md"
                 }
                 failure{
                     echo "========A execution failed========"
