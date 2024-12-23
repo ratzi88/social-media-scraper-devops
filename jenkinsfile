@@ -49,7 +49,7 @@ pipeline{
         }
 
         stage("Docker build"){
-            dir("${env.BUILD_NUMBER}/backend") {
+            dir("${env.BUILD_NUMBER}/backend"){
                 steps{
                     sh "docker build -t python-app ."
                 }
