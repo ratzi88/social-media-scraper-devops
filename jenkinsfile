@@ -1,7 +1,5 @@
 pipeline{
-    agent{
-        label "node"
-    }
+    agent label any
     stages{
         stage("Clonning app"){
             steps{
