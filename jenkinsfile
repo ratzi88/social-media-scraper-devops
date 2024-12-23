@@ -3,6 +3,7 @@ pipeline{
     stages{
         stage("Clonning app"){
             steps{
+                git branch: 'main', credentialsId: 'b4a3c35c-aa99-4abe-8aea-9d83f979cb76', url: 'https://github.com/ratzi88/social-media-scraper-devops'
                 echo "========app clone========"
             }
             post{
