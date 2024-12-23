@@ -33,16 +33,16 @@ pipeline{
                 }
         }
         parallel{
-                stage("python installing"){
-                    steps{
-                        echo "11111"
-                    }
+            stage("python installing"){
+                steps{
+                    echo "11111"
                 }
-                stage("Other installing"){
-                    steps{
-                        echo "11111"
-                    }
-                }                        
+            }
+            stage("Other installing"){
+                steps{
+                    echo "11111"
+                }
+            }                        
 
         }
     }
