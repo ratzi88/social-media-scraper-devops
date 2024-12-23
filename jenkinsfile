@@ -3,8 +3,10 @@ pipeline{
     stages{
         stage("Clonning app"){
             steps{
-                git branch: 'main', credentialsId: 'b4a3c35c-aa99-4abe-8aea-9d83f979cb76', url: 'https://github.com/ratzi88/social-media-scraper-devops'
-                echo "========app clone========"
+                dir('${env.BUILD_NUMBER}') {
+                    git branch: 'main', credentialsId: 'b4a3c35c-aa99-4abe-8aea-9d83f979cb76', url: 'https://github.com/ratzi88/social-media-scraper-devops'
+                    echo "========app clone========"
+                }
             }
             post{
                 always{
@@ -13,6 +15,7 @@ pipeline{
                 success{
                      sh "git rm -rf jenkinsfile"
                      sh "git rm -rf README.md"
+                     sh "git rm -rf .git"
                 }
                 failure{
                     echo "========A execution failed========"
