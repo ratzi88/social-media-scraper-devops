@@ -4,8 +4,8 @@ pipeline{
         stage("Clonning app"){
             steps{
                 echo "========app clone========"
-                echo ${env.BUILD_ID}
-                echo ${env.BUILD_NUMBER}
+                echo "${env.BUILD_ID}"
+                echo "${env.BUILD_NUMBER}"
 
                 dir('${env.BUILD_NUMBER}') {
                     git branch: 'main', credentialsId: 'b4a3c35c-aa99-4abe-8aea-9d83f979cb76', url: 'https://github.com/ratzi88/social-media-scraper-devops'
