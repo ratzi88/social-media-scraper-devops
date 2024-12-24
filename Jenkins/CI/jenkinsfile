@@ -60,6 +60,7 @@ pipeline{
         //     steps{
         //         dir("${env.BUILD_NUMBER}/backend"){
         //             sh "docker tag local-image-name sframir/social-media-scraper:${env.BUILD_NUMBER}"
+        //             sh "docker login"
         //             sh "docker push sframir/social-media-scraper:${env.BUILD_NUMBER}"
         //         }
         //     }
