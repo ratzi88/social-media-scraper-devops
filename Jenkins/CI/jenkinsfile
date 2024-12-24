@@ -48,7 +48,15 @@ pipeline{
             }
         }
 
-        // stage("Docker build"){
+        stage("Docker build"){
+            steps{
+                dir("${env.BUILD_NUMBER}/backend"){
+                    sh "docker build -t social-media-scraper:${env.BUILD_NUMBER} ."
+                }
+            }
+        // }
+// docker run -d
+        // stage("sanity test"){
         //     steps{
         //         dir("${env.BUILD_NUMBER}/backend"){
         //             sh "docker build -t social-media-scraper:${env.BUILD_NUMBER} ."
@@ -56,7 +64,7 @@ pipeline{
         //     }
         // }
 
-        // stage("Docker push to github"){
+        // stage("Docker push to hub.docker"){
         //     steps{
         //         dir("${env.BUILD_NUMBER}/backend"){
         //             sh "docker tag local-image-name sframir/social-media-scraper:${env.BUILD_NUMBER}"
@@ -74,7 +82,7 @@ pipeline{
         }
         success{
             echo "========social-media-ci successfully ========"
-            build 'social-media-cd', wait: false
+            // build 'social-media-cd', wait: false
         }
         failure{
             echo "========pipeline execution failed========"
