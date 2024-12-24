@@ -1,32 +1,27 @@
 pipeline{
     agent any
     stages{
-        stage("A"){
+        stage("Clonning app"){
             steps{
-                echo "========executing A========"
+                echo "========clone========"
+
+                dir("${env.BUILD_NUMBER}") {
+                    git branch: 'main', credentialsId: 'b4a3c35c-aa99-4abe-8aea-9d83f979cb76', url: 'https://github.com/ratzi88/social-media-scraper-devops'
+                }
             }
             post{
                 always{
                     echo "========always========"
                 }
-                success{
-                    echo "========A executed successfully========"
-                }
+                // success{
+                //     dir("${env.BUILD_NUMBER}") {
+                //         sh "git rm -rf jenkinsfile"
+                //         sh "git rm -rf README.md"
+                //         // sh "git rm -rf .git"
+                //     }
+                // }
                 failure{
                     echo "========A execution failed========"
                 }
             }
         }
-    }
-    post{
-        always{
-            echo "========always========"
-        }
-        success{
-            echo "========pipeline executed successfully ========"
-        }
-        failure{
-            echo "========pipeline execution failed========"
-        }
-    }
-}

@@ -51,11 +51,19 @@ pipeline{
         // stage("Docker build"){
         //     steps{
         //         dir("${env.BUILD_NUMBER}/backend"){
-        //             sh "docker build -t python-app ."
+        //             sh "docker build -t social-media-scraper:${env.BUILD_NUMBER} ."
         //         }
         //     }
         // }
 
+        // stage("Docker push to github"){
+        //     steps{
+        //         dir("${env.BUILD_NUMBER}/backend"){
+        //             sh "docker tag local-image-name sframir/social-media-scraper:${env.BUILD_NUMBER}"
+        //             sh "docker push sframir/social-media-scraper:${env.BUILD_NUMBER}"
+        //         }
+        //     }
+        // }
 
 
     }
