@@ -19,7 +19,7 @@ pipeline{
                 success{
                     dir("${env.BUILD_NUMBER}") {
                         sh "git rm -rf jenkinsfile"
-                        sh "git rm -rf README.md"
+                        // sh "git rm -rf README.md"
                         // sh "git rm -rf .git"
                     }
                 }
@@ -28,11 +28,11 @@ pipeline{
                 }
             }
         }
-        stage("apt update upgrade"){
-            steps{
-                sh "sudo apt update && sudo apt upgrade -y"
-                }
-        }
+        // stage("apt update upgrade"){
+        //     steps{
+        //         sh "sudo apt update && sudo apt upgrade -y"
+        //         }
+        // }
         stage("Verifications"){
             parallel{
                 stage("python installing"){
