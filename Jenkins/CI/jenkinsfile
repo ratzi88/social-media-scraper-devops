@@ -54,7 +54,7 @@ pipeline{
                     sh "docker build -t social-media-scraper:${env.BUILD_NUMBER} ."
                 }
             }
-        // }
+        }
 // docker run -d
         // stage("sanity test"){
         //     steps{
@@ -76,17 +76,16 @@ pipeline{
 
 
     }
-    post{
-        always{
-            echo "========always========"
-        }
-        success{
-            echo "========social-media-ci successfully ========"
-            // build 'social-media-cd', wait: false
-        }
-        failure{
-            echo "========pipeline execution failed========"
-        }
-    }
-}
+    // post{
+    //     always{
+    //         echo "========always========"
+    //     }
+    //     success{
+    //         echo "========social-media-ci successfully ========"
+    //         // build 'social-media-cd', wait: false
+    //     }
+    //     failure{
+    //         echo "========pipeline execution failed========"
+    //     }
+    // }
 }
