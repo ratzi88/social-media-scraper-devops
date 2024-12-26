@@ -78,9 +78,13 @@ pipeline{
                 sh "docker push sframir/social-media-scraper:${env.BUILD_NUMBER}"
                 sh "docker push sframir/social-media-scraper:latest"
             }
+            post{
+                always{
+                    sh "docker rmi social-media-scraper:${env.BUILD_NUMBER}"
+                }
+            }
         }
         
-
 
     }
     post{
