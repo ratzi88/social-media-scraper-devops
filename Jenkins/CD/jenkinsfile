@@ -26,5 +26,29 @@ pipeline{
                 }
             }
         }
+        stage("apt update upgrade"){
+            steps{
+                sh "sudo apt update && sudo apt upgrade -y"
+                }
+        }
+        stage("Verifications"){
+            parallel{
+                stage("terraform installing"){
+                    steps{
+                        sh "sudo apt install -y wget unzip"
+                        sh "wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip"
+                        sh "unzip terraform_1.6.0_linux_amd64.zip"
+                        sh "sudo mv terraform /usr/local/bin/"
+                        sh "terraform --version"
+
+                    }
+                }
+                stage("curl installing"){
+                    steps{
+                        sh "sudo apt install curl -y"
+                    }
+                }                        
+            }
+        }
     }
 }
