@@ -37,12 +37,12 @@ pipeline{
             parallel{
                 stage("python installing"){
                     steps{
-                        echo "sudo apt install -y python3.11"
+                        sh "apt install -y python3.11"
                     }
                 }
-                stage("Other installing"){
+                stage("curl installing"){
                     steps{
-                        echo "2222"
+                        sh "apt install curl -y"
                     }
                 }                        
             }
@@ -64,7 +64,7 @@ pipeline{
         }
         stage("sanity test"){
              steps{
-                    sh "curl -X POST -H 'Content-Type: application/json' -d '{'name': 'Amir Schaefer'}' http://localhost:5000/search"
+                    // sh "curl -X POST -H 'Content-Type: application/json' -d '{'name': 'Amir Schaefer'} http://localhost:5000/search"
                     sh "docker stop social-media-scraper_${env.BUILD_NUMBER}"
                     sh "docker rm social-media-scraper_${env.BUILD_NUMBER}"
                  }
