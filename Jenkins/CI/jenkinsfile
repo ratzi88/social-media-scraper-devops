@@ -93,7 +93,7 @@ pipeline{
         }
         success{
             echo "========social-media-ci successfully ========"
-            build 'CD-social-media-scraper', wait: false
+            build wait: false, propagate: false, job: 'CD-social-media-scraper', waitForStart: true
         }
         failure{
             echo "========pipeline execution failed========"
