@@ -62,7 +62,7 @@ pipeline{
         stage("Docker run validation"){
             steps{
                 dir("${env.BUILD_NUMBER}/backend"){
-                    sh "docker run -t social-media-scraper:${env.BUILD_NUMBER}"
+                    sh "docker run -d social-media-scraper:${env.BUILD_NUMBER}"
                 }
             }
         }
@@ -77,9 +77,9 @@ pipeline{
         stage("Docker push to hub.docker"){
             steps{
                 dir("${env.BUILD_NUMBER}/backend"){
-                    sh "docker tag local-image-name sframir/social-media-scraper:${env.BUILD_NUMBER}"
+                    sh "docker social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:latest"
                     sh "docker login"
-                    sh "docker push sframir/social-media-scraper:${env.BUILD_NUMBER}"
+                    sh "docker push sframir/social-media-scraper:latest"
                 }
             }
         }
