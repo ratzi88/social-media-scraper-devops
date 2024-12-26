@@ -83,16 +83,16 @@ pipeline{
 
 
     }
-    // post{
-    //     always{
-    //         echo "========always========"
-    //     }
-    //     success{
-    //         echo "========social-media-ci successfully ========"
-    //         // build 'CD-social-media-scraper', wait: false
-    //     }
-    //     failure{
-    //         echo "========pipeline execution failed========"
-    //     }
-    // }
+    post{
+        always{
+            echo "========always========"
+        }
+        success{
+            echo "========social-media-ci successfully ========"
+            // build 'CD-social-media-scraper', wait: false
+        }
+        failure{
+            echo "========pipeline execution failed========"
+        }
+    }
 }
