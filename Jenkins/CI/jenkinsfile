@@ -64,7 +64,7 @@ pipeline{
         }
         stage("sanity test"){
              steps{
-                    // sh "curl -X POST -H 'Content-Type: application/json' -d '{'name': 'Amir Schaefer'} http://localhost:5000/search"
+                    sh "curl -X POST -H 'Content-Type: application/json' -d '{'name': 'Amir Schaefer'} http://localhost:5000/search"
                     sh "docker stop social-media-scraper_${env.BUILD_NUMBER}"
                     sh "docker rm social-media-scraper_${env.BUILD_NUMBER}"
                  }
