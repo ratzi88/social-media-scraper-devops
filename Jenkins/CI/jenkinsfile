@@ -32,11 +32,11 @@ pipeline{
                 }
             }
         }
-        // stage("apt update upgrade"){
-        //     steps{
-        //         sh "sudo apt update && sudo apt upgrade -y"
-        //         }
-        // }
+        stage("apt update upgrade"){
+            steps{
+                sh "sudo apt update && sudo apt upgrade -y"
+                }
+        }
         stage("Verifications"){
             parallel{
                 stage("python installing"){
@@ -59,7 +59,13 @@ pipeline{
                 }
             }
         }
-// docker run -d
+        stage("Docker run validation"){
+            steps{
+                dir("${env.BUILD_NUMBER}/backend"){
+                    sh "docker run -t social-media-scraper:${env.BUILD_NUMBER}"
+                }
+            }
+        }
         // stage("sanity test"){
         //     steps{
         //         dir("${env.BUILD_NUMBER}/backend"){
