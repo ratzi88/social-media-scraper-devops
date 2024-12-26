@@ -68,6 +68,7 @@ pipeline{
         }
         // stage("sanity test"){
         //     steps{
+                    // curl -X POST -H "Content-Type: application/json" -d '{"name": "השם של האדם שתרצה לחפש"}' http://localhost:5000/search
         //         dir("${env.BUILD_NUMBER}/backend"){
         //             sh "docker build -t social-media-scraper:${env.BUILD_NUMBER} ."
         //         }
@@ -76,9 +77,8 @@ pipeline{
 
         stage("Docker push to hub.docker"){
             steps{
-                dir("${env.BUILD_NUMBER}/backend"){
                     sh "docker tag social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:latest"
-                    sh "docker login"
+                    // sh "docker login"
                     sh "docker push sframir/social-media-scraper:latest"
                 }
             }
