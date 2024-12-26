@@ -17,20 +17,12 @@ pipeline{
                     echo "========always========"
                 }
                 success{
-                    sh "rm -rf .git"
-                    sh "rm -rf 10"
-                    sh "rm -rf 16"
-                    sh "rm -rf 17"
-                    sh "rm -rf 18"
-                    sh "rm -rf 9"
-                    sh "rm -rf 8"
-                    sh "rm -rf Jenkins"
-                    sh "rm -rf Terraform"
-                    sh "rm -rf README.md"     
+                    sh "rm -rf 7"
+                    sh "rm -rf {${env.BUILD_NUMBER}-1}"     
                     dir("${env.BUILD_NUMBER}") {
                         sh "rm -rf Jenkins"
                         sh "rm -rf README.md"
-                        sh "git rm -rf .git"
+                        sh "rm -rf .git"
                     }
                 }
                 failure{
