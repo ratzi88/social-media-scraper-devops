@@ -62,14 +62,13 @@ pipeline{
                 }
             }
         }
-        // stage("sanity test"){
-        //     steps{
+        stage("sanity test"){
+             steps{
                     // curl -X POST -H "Content-Type: application/json" -d '{"name": "השם של האדם שתרצה לחפש"}' http://localhost:5000/search
-                    // sh "docker stop social-media-scraper_${env.BUILD_NUMBER}"
-                    // sh "docker rm social-media-scraper_${env.BUILD_NUMBER}"
-        //         }
-        //     }
-        // }
+                    sh "docker stop social-media-scraper_${env.BUILD_NUMBER}"
+                    sh "docker rm social-media-scraper_${env.BUILD_NUMBER}"
+                 }
+        }
 
         stage("Docker push to hub.docker"){
             steps{
