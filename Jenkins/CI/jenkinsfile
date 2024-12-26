@@ -28,8 +28,8 @@ pipeline{
                     sh "rm -rf Terraform"
                     sh "rm -rf README.md"     
                     dir("${env.BUILD_NUMBER}") {
-                        sh "rm -rf jenkinsfile"
-                        
+                        sh "rm -rf Jenkins"
+                        sh "rm -rf README.md"
                         sh "git rm -rf .git"
                     }
                 }
