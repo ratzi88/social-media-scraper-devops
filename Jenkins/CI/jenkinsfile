@@ -78,9 +78,9 @@ pipeline{
         stage("Docker push to hub.docker"){
             steps{
                 echo "docker tag social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:latest"
-                sh "docker tag social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:latest"
+                sh "docker tag social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:${env.BUILD_NUMBER}"
                 // sh "docker login"
-                sh "docker push sframir/social-media-scraper:latest"
+                sh "docker push sframir/social-media-scraper:${env.BUILD_NUMBER}"
             }
         }
         
