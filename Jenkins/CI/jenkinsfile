@@ -182,50 +182,57 @@ pipeline {
                 }
             }
         }
-        // stage("Docker run MongoDB") {
-        //     steps {
-        //         dir("${env.BUILD_NUMBER}/app/") {
-        //             sh """
-        //                 docker run -d -p 27017:27017 \
-        //                 -v init-capped-collection.js:/docker-entrypoint-initdb.d/init-capped-collection.js \
-        //                 --network jenkins_env \
-        //                 --name mongodb mongo:5.0
-        //             """
-        //         }
-        //     }
-        // }
-        // stage("Docker app build") {
-        //     steps {
-        //         dir("${env.BUILD_NUMBER}/app/backend") {
-        //             sh "docker build -t social-media-scraper:${env.BUILD_NUMBER} ."
-        //         }
-        //     }
-        // }
-        // stage("Docker run validation") {
-        //     steps {
-        //         dir("${env.BUILD_NUMBER}/app/backend") {
-        //             sh """
-        //                 docker run -d -p 5000:5000 \
-        //                 --network jenkins_env \
-        //                 --name social-media-scraper_${env.BUILD_NUMBER} \
-        //                 -e MONGO_URI='mongodb://mongodb:27017/social_media' \
-        //                 social-media-scraper:${env.BUILD_NUMBER}
-        //             """
-        //         }
-        //     }
-        // }
+        stage("Docker run MongoDB") {
+            steps {
+                dir("${env.BUILD_NUMBER}/app/") {
+                    // sh """
+                    //     docker run -d -p 27017:27017 \
+                    //     -v init-capped-collection.js:/docker-entrypoint-initdb.d/init-capped-collection.js \
+                    //     --network jenkins_env \
+                    //     --name mongodb mongo:5.0
+                    // """
+                    sh """
+                    docker run --name mongodb -d -p 27017:27017 -v mongodb_data:/data/db mongo:5.0
+                    """
+                }
+            }
+        }
+        stage("Docker app build") {
+            steps {
+                dir("${env.BUILD_NUMBER}/app/backend") {
+                    sh "docker build -t social-media-scraper:${env.BUILD_NUMBER} ."
+                }
+            }
+        }
+        stage("Docker run validation") {
+            steps {
+                dir("${env.BUILD_NUMBER}/app/backend") {
+                    // sh """
+                    //     docker run -d -p 5000:5000 \
+                    //     --network jenkins_env \
+                    //     --name social-media-scraper_${env.BUILD_NUMBER} \
+                    //     -e MONGO_URI='mongodb://mongodb:27017/social_media' \
+                    //     social-media-scraper:${env.BUILD_NUMBER}
+                    // """
+                    sh """
+                    docker run --name social-media-scraper_${env.BUILD_NUMBER} -d -p 5000:5000 --link mongodb:mongodb -e MONGO_URI=mongodb://mongodb:27017/social_media social-media-scraper-backend:${env.BUILD_NUMBER}
+                    """
+
+                }
+            }
+        }
         stage("Sanity test") {
             steps {
                 dir("${env.BUILD_NUMBER}/app/frontend") {
-                    sh """
-                        export BUILD_NUMBER=${env.BUILD_NUMBER}
-                        docker-compose up -d --build
-                    """
+                    // sh """
+                    //     export BUILD_NUMBER=${env.BUILD_NUMBER}
+                    //     docker-compose up -d --build
+                    // """
 
                     sh """
                         curl -X POST -H "Content-Type: application/json" \
                         -d '{"name": "Amir Schaefer"}' \
-                        http://backend-1:5000/search
+                        http://social-media-scraper_${env.BUILD_NUMBER}:5000/search
                     """
                 }
             }
