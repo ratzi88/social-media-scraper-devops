@@ -49,8 +49,8 @@ pipeline{
         }
         stage("Docker run mondo_db"){
             steps{
-                dir("${env.BUILD_NUMBER}/app/backend"){
-                    sh "docker run -d -p 27017:27017 -v ../init-capped-collection.js:/docker-entrypoint-initdb.d/init-capped-collection.js --network jenkins_env --name mongoDB_${env.BUILD_NUMBER} mongo:5.0"
+                dir("${env.BUILD_NUMBER}/app/"){
+                    sh "docker run -d -p 27017:27017 -v init-capped-collection.js:/docker-entrypoint-initdb.d/init-capped-collection.js --network jenkins_env --name mongoDB_${env.BUILD_NUMBER} mongo:5.0"
                 }
             }
         }
