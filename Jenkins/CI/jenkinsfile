@@ -71,7 +71,7 @@ pipeline{
         stage("sanity test"){
              steps{
                     sh """
-                    curl -X POST -H 'Content-Type: application/json' -d '{'name': 'Amir Schaefer'}' http://social-media-scraper_${env.BUILD_NUMBER}:5000/search
+                    curl -X POST -H "Content-Type: application/json" -d '{"name": "Amir Schaefer"}' http://social-media-scraper_${env.BUILD_NUMBER}:5000/search
                     """
                  }
             post{
@@ -120,3 +120,4 @@ pipeline{
         }
     }
 }
+// curl -X POST -H "Content-Type: application/json" -d '{"name": "Amir Schaefer"}' http://social-media-scraper_54:5000/search
