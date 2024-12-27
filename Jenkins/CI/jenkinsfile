@@ -72,7 +72,7 @@ pipeline{
              steps{
                     dir("${env.BUILD_NUMBER}/app/frontend"){
                         sh """
-                        curl -X POST -H "Content-Type: application/json" -d '{"name": "Amir Schaefer"}' http://social-media-scraper_${env.BUILD_NUMBER}:5000/search
+                        curl -X POST -H "Content-Type: application/json" -d "{"name": "Amir Schaefer"}" http://social-media-scraper_${env.BUILD_NUMBER}:5000/search
                         """
                     }
                 }
