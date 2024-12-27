@@ -218,7 +218,7 @@ pipeline {
             steps {
                 dir("${env.BUILD_NUMBER}/app/frontend") {
                     sh """
-                        docker compose up -d -e BUILD_NUMBER=${env.BUILD_NUMBER} --build
+                        docker-compose up -d -e BUILD_NUMBER=${env.BUILD_NUMBER} --build
                     """
 
                     sh """
