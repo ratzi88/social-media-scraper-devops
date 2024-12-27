@@ -70,10 +70,15 @@ pipeline{
         }
         stage("sanity test"){
              steps{
-                    sh """
-                    curl -X POST -H "Content-Type: application/json" -d '{"name": "Amir Schaefer"}' http://social-media-scraper_${env.BUILD_NUMBER}:5000/search
-                    """
-                 }
+                    dir("${env.BUILD_NUMBER}/app/frontend"){
+                        sh """
+                        docker compose up -d -- jenkins_env --build
+                        // curl -X POST -H "Content-Type: application/json" -d '{"name": "Amir Schaefer"}' http://social-media-scraper_${env.BUILD_NUMBER}:5000/search
+
+                        """
+                    }
+                }
+
             post{
                 always{
                     echo "====++++always++++===="
