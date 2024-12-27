@@ -71,9 +71,22 @@ pipeline{
         stage("sanity test"){
              steps{
                     sh "curl -X POST -H 'Content-Type: application/json' -d '{'name': 'Amir Schaefer'}' http://social-media-scraper_${env.BUILD_NUMBER}:5000/search"
+
+                 }
+            post{
+                always{
+                    echo "====++++always++++===="
+                }
+                success{
                     sh "docker stop social-media-scraper_${env.BUILD_NUMBER}"
                     sh "docker rm social-media-scraper_${env.BUILD_NUMBER}"
-                 }
+                    sh "docker stop mongoDB_${env.BUILD_NUMBER}"
+                    sh "docker rm mongoDB_${env.BUILD_NUMBER}"
+                }
+                failure{
+                    echo "====++++only when failed++++===="
+                }
+            }
         }
 
         stage("Docker push to hub.docker"){
