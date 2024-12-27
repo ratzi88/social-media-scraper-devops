@@ -225,7 +225,7 @@ pipeline {
                     sh """
                         curl -X POST -H "Content-Type: application/json" \
                         -d '{"name": "Amir Schaefer"}' \
-                        http://social-media-scraper-1:5000/search
+                        http://backend-1:5000/search
                     """
                 }
             }
