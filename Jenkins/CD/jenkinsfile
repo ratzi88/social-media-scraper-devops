@@ -5,9 +5,9 @@ pipeline{
             steps{
                 echo "========clone========"
 
-                // dir("${env.BUILD_NUMBER}") {
-                //     git branch: 'main', credentialsId: '49bd9cd6-738c-4792-a6aa-fc25cffb434c', url: 'https://github.com/ratzi88/social-media-scraper-devops'
-                // }
+                dir("${env.BUILD_NUMBER}/fronfend") {
+                    git branch: 'main', credentialsId: '49bd9cd6-738c-4792-a6aa-fc25cffb434c', url: 'https://github.com/ratzi88/social-media-scraper-devops'
+                }
 
             }
             post{
@@ -61,22 +61,6 @@ pipeline{
                                 terraform --version
                         """
                     }
-
-
-
-                        // sh """
-                        //     if ! dpkg -l | grep -q wget; then
-                        //     sudo apt install -y wget
-                        //     fi
-                        //     if ! dpkg -l | grep -q unzip; then
-                        //     sudo apt install -y unzip
-                        //     fi
-                        // """
-
-                        // sh "wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip"
-                        // sh "unzip terraform_1.6.0_linux_amd64.zip"
-                        // sh "sudo mv terraform /usr/local/bin/"
-                        // sh "terraform --version"
                 }
                 stage("curl installing"){
                         sh """
@@ -84,13 +68,60 @@ pipeline{
                             if ! dpkg -l | grep -q curl; then
                                 echo "curl not found, installing..."
                                 sudo apt install curl -y
-                        else
-                            echo "curl is already installed, skipping installation."
-                        fi
+                            else
+                                echo "curl is already installed, skipping installation."
+                            fi
                         """
-                //         sh "sudo apt install curl -y"
                 }                        
             }
         }
+
+        stage("Docker frontend app build") {
+            steps {
+                dir("${env.BUILD_NUMBER}/app/backend") {
+                    sh "docker build -t social-media-scraper_frontend:${env.BUILD_NUMBER} ."
+                }
+            }
+        }
+        stage("Docker run validation") {
+            steps {
+                dir("${env.BUILD_NUMBER}/app/backend") {
+                    sh """
+                        docker run -d -p 3000:80 \
+                        --network jenkins_env \
+                        --name social-media-scraper_frontend_${env.BUILD_NUMBER} \
+                        -e MONGO_URI='mongodb://mongodb:27017/social_media' \
+                        social-media-scraper_frontend:${env.BUILD_NUMBER}
+                    """
+                    // sh """
+                    // docker run --name social-media-scraper_${env.BUILD_NUMBER} -d -p 5000:5000 --network jenkins_env --link mongodb:mongodb -e MONGO_URI=mongodb://mongodb:27017/social_media social-media-scraper:${env.BUILD_NUMBER}
+                    // """
+
+                }
+            }
+        }
+
+
+        stage("Docker frontend push to Docker Hub") {
+            steps {
+                sh """
+                    docker tag social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
+                    docker tag social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:latest
+                    docker push sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
+                    docker push sframir/social-media-scraper_frontend:latest
+                """
+            }
+            post {
+                always {
+                    sh """
+                        docker stop social-media-scraper_frontend_${env.BUILD_NUMBER}
+                        docker rm social-media-scraper_frontend_${env.BUILD_NUMBER}
+                    """
+
+                    sh "docker rmi social-media-scraper_frontend:${env.BUILD_NUMBER}"
+                }
+            }
+        }
+
     }
 }
