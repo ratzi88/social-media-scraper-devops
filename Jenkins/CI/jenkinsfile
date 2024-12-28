@@ -38,10 +38,22 @@ pipeline {
                         sh "sudo apt install python3.11 -y"
                     }
                 }
-                stage("curl installing") {
-                    steps {
-                        sh "sudo apt install curl -y"
-                    }
+                stage("curl installing"){
+                    sh """
+                        # Check if curl is installed, install if missing
+                        if ! dpkg -l | grep -q curl; then
+                            echo "curl not found, installing..."
+                            sudo apt install curl -y
+                        else
+                            echo "curl is already installed, skipping installation."
+                        fi
+                        """
+                }                        
+
+                // stage("curl installing") {
+                //     steps {
+                //         sh "sudo apt install curl -y"
+                //     }
                 }
             }
         }
@@ -93,7 +105,6 @@ pipeline {
                     //     docker-compose up -d --build
                     // """
                    retry(3) {
- 
                         sleep 10
                         sh """
                             curl -X POST -H "Content-Type: application/json" \

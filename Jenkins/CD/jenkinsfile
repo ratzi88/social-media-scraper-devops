@@ -1,18 +1,18 @@
 pipeline{
     agent any
     stages{
-        stage("Clonning app"){
+        stage("Clonning devops folder"){
             steps{
                 echo "========clone========"
 
-                dir("${env.BUILD_NUMBER}/fronfend") {
+                dir("${env.BUILD_NUMBER}/devops") {
                     git branch: 'main', credentialsId: '49bd9cd6-738c-4792-a6aa-fc25cffb434c', url: 'https://github.com/ratzi88/social-media-scraper-devops'
                 }
 
             }
             post{
                 always{
-                    echo "========always========"
+                    echo "========git clone devops pass========"
                 }
                 // success{
                 //     dir("${env.BUILD_NUMBER}") {
@@ -22,7 +22,7 @@ pipeline{
                 //     }
                 // }
                 failure{
-                    echo "========A execution failed========"
+                    echo "========git clone devops failed========"
                 }
             }
         }
