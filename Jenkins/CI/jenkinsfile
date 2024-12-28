@@ -92,12 +92,15 @@ pipeline {
                     //     export BUILD_NUMBER=${env.BUILD_NUMBER}
                     //     docker-compose up -d --build
                     // """
-
-                    sh """
-                        curl -X POST -H "Content-Type: application/json" \
-                        -d '{"name": "Hothaifa Zoubi"}' \
-                        http://social-media-scraper_${env.BUILD_NUMBER}:5000/search
-                    """
+                   retry(3) {
+ 
+                        sleep 10
+                        sh """
+                            curl -X POST -H "Content-Type: application/json" \
+                            -d '{"name": "Hothaifa Zoubi"}' \
+                            http://social-media-scraper_${env.BUILD_NUMBER}:5000/search
+                        """
+                    }
                 }
             }
             post {
