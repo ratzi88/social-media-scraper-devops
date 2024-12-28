@@ -35,18 +35,60 @@ pipeline{
             parallel{
                 stage("terraform installing"){
                     steps{
-                        sh "sudo apt install -y wget unzip"
-                        sh "wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip"
-                        sh "unzip terraform_1.6.0_linux_amd64.zip"
-                        sh "sudo mv terraform /usr/local/bin/"
-                        sh "terraform --version"
 
+                        sh """
+                            # Check if wget is installed, install if missing
+                            if ! dpkg -l | grep -q wget; then
+                                sudo apt install -y wget
+                            fi
+
+                            # Check if unzip is installed, install if missing
+                            if ! dpkg -l | grep -q unzip; then
+                                sudo apt install -y unzip
+                            fi
+
+                            # Check if Terraform is already installed
+                            if ! command -v terraform &> /dev/null; then
+                                echo "Terraform not found, installing..."
+                                wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip
+                                unzip terraform_1.6.0_linux_amd64.zip
+                                sudo mv terraform /usr/local/bin/
+                            else
+                                echo "Terraform is already installed, skipping installation."
+                            fi
+
+                            # Verify Terraform installation
+                                terraform --version
+                        """
                     }
+
+
+
+                        // sh """
+                        //     if ! dpkg -l | grep -q wget; then
+                        //     sudo apt install -y wget
+                        //     fi
+                        //     if ! dpkg -l | grep -q unzip; then
+                        //     sudo apt install -y unzip
+                        //     fi
+                        // """
+
+                        // sh "wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip"
+                        // sh "unzip terraform_1.6.0_linux_amd64.zip"
+                        // sh "sudo mv terraform /usr/local/bin/"
+                        // sh "terraform --version"
                 }
                 stage("curl installing"){
-                    steps{
-                        sh "sudo apt install curl -y"
-                    }
+                        sh """
+                            # Check if curl is installed, install if missing
+                            if ! dpkg -l | grep -q curl; then
+                                echo "curl not found, installing..."
+                                sudo apt install curl -y
+                        else
+                            echo "curl is already installed, skipping installation."
+                        fi
+                        """
+                //         sh "sudo apt install curl -y"
                 }                        
             }
         }
