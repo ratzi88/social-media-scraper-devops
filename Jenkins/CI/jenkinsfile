@@ -57,6 +57,7 @@ pipeline {
                     sh """
                     docker run --name mongodb -d -p 27017:27017 -v mongodb_data:/data/db --network jenkins_env -v init-capped-collection.js:/docker-entrypoint-initdb.d/init-capped-collection.js mongo:5.0
                     """
+                    sleep 15
                 }
             }
         }
