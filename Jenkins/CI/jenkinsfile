@@ -103,12 +103,12 @@ pipeline {
             post {
                 always {
                     echo "====++++always++++===="
-                    sh """
-                        docker stop social-media-scraper_${env.BUILD_NUMBER}
-                        docker rm social-media-scraper_${env.BUILD_NUMBER}
-                        docker stop mongodb
-                        docker rm mongodb
-                    """
+                    // sh """
+                    //     docker stop social-media-scraper_${env.BUILD_NUMBER}
+                    //     docker rm social-media-scraper_${env.BUILD_NUMBER}
+                    //     docker stop mongodb
+                    //     docker rm mongodb
+                    // """
                 }
                 failure {
                     echo "====++++only when failed++++===="
