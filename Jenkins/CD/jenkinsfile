@@ -30,35 +30,32 @@ pipeline{
                 sh "sudo apt update && sudo apt upgrade -y"
                 }
         }
-        stage("Verifications"){
-            stage("terraform installing"){
-                steps{
-                    sh """
-                        # Check if wget is installed, install if missing
-                        if ! dpkg -l | grep -q wget; then
-                            sudo apt install -y wget
-                        fi
+        stage("terraform installing"){
+            steps{
+                sh """
+                    # Check if wget is installed, install if missing
+                    if ! dpkg -l | grep -q wget; then
+                        sudo apt install -y wget
+                    fi
                         
-                        # Check if unzip is installed, install if missing
-                        if ! dpkg -l | grep -q unzip; then
-                            sudo apt install -y unzip
-                        fi
+                    # Check if unzip is installed, install if missing
+                    if ! dpkg -l | grep -q unzip; then
+                        sudo apt install -y unzip
+                    fi
 
-                        # Check if Terraform is already installed
-                        if ! command -v terraform &> /dev/null; then
-                            echo "Terraform not found, installing..."
-                            wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip
-                            unzip terraform_1.6.0_linux_amd64.zip
-                            sudo mv terraform /usr/local/bin/
-                        else
-                            echo "Terraform is already installed, skipping installation."
-                        fi
+                    # Check if Terraform is already installed
+                    if ! command -v terraform &> /dev/null; then
+                        echo "Terraform not found, installing..."
+                        wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip
+                        unzip terraform_1.6.0_linux_amd64.zip
+                        sudo mv terraform /usr/local/bin/
+                    else
+                        echo "Terraform is already installed, skipping installation."
+                    fi
 
-                        # Verify Terraform installation
-                            terraform --version
-                        """
-                    }
-                }
+                    # Verify Terraform installation
+                        terraform --version
+                    """
             }
         }
         stage("Docker frontend app build") {
