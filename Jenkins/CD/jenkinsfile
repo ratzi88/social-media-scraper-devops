@@ -177,21 +177,20 @@ pipeline {
             }
         }
 
-        stage("A") {
+        stage("k8s") {
             steps {
                 echo "====++++executing A++++===="
-            }
-            post {
-                always {
-                    echo "====++++always++++===="
-                }
-                success {
-                    echo "====++++A executed successfully++++===="
-                }
-                failure {
-                    echo "====++++A execution failed++++===="
-                }
-            }
-        }
+                script {
+                    sshagent(credentials : ['jenkins-pem']) {
+                        sh "echo pwd"
+                        sh 'ssh -t -t ubuntu@xx.xxx.xx.xx -o StrictHostKeyChecking=no'
+                        sh "echo pwd"
+                        sh 'sudo -i -u root'
+                        sh 'cd /opt/docker/web'
+                        sh 'echo pwd'
+                    }
+                 }
+             }
+         }     
     }
 }
