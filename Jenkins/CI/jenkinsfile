@@ -98,7 +98,7 @@ pipeline {
                                 -d '{"name": "Hothaifa Zoubi"}' \
                                 http://social-media-scraper_${env.BUILD_NUMBER}:5000/search
                             """, returnStdout: true).trim()
-                            
+                            echo response
                             // Check if the response contains the expected LinkedIn URL
                              if (response.contains('"linkedin": "https://il.linkedin.com/in/hothaifa-zoubi-894b10223"')) {
                                 echo "Sanity passed: Hodi LinkedIn was found: https://il.linkedin.com/in/hothaifa-zoubi-894b10223"
