@@ -4,7 +4,6 @@ pipeline{
         stage("Clonning devops folder"){
             steps{
                 echo "========clone========"
-
                 dir("${env.BUILD_NUMBER}/devops") {
                     git branch: 'main', credentialsId: '49bd9cd6-738c-4792-a6aa-fc25cffb434c', url: 'https://github.com/ratzi88/social-media-scraper-devops'
                 }
@@ -32,58 +31,44 @@ pipeline{
                 }
         }
         stage("Verifications"){
-            parallel{
-                stage("terraform installing"){
-                    steps{
+            stage("terraform installing"){
+                steps{
+                    sh """
+                        # Check if wget is installed, install if missing
+                        if ! dpkg -l | grep -q wget; then
+                            sudo apt install -y wget
+                        fi
+                        
+                        # Check if unzip is installed, install if missing
+                        if ! dpkg -l | grep -q unzip; then
+                            sudo apt install -y unzip
+                        fi
 
-                        sh """
-                            # Check if wget is installed, install if missing
-                            if ! dpkg -l | grep -q wget; then
-                                sudo apt install -y wget
-                            fi
+                        # Check if Terraform is already installed
+                        if ! command -v terraform &> /dev/null; then
+                            echo "Terraform not found, installing..."
+                            wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip
+                            unzip terraform_1.6.0_linux_amd64.zip
+                            sudo mv terraform /usr/local/bin/
+                        else
+                            echo "Terraform is already installed, skipping installation."
+                        fi
 
-                            # Check if unzip is installed, install if missing
-                            if ! dpkg -l | grep -q unzip; then
-                                sudo apt install -y unzip
-                            fi
-
-                            # Check if Terraform is already installed
-                            if ! command -v terraform &> /dev/null; then
-                                echo "Terraform not found, installing..."
-                                wget https://releases.hashicorp.com/terraform/1.6.0/terraform_1.6.0_linux_amd64.zip
-                                unzip terraform_1.6.0_linux_amd64.zip
-                                sudo mv terraform /usr/local/bin/
-                            else
-                                echo "Terraform is already installed, skipping installation."
-                            fi
-
-                            # Verify Terraform installation
-                                terraform --version
+                        # Verify Terraform installation
+                            terraform --version
                         """
                     }
                 }
-                stage("curl installing"){
-                        sh """
-                            # Check if curl is installed, install if missing
-                            if ! dpkg -l | grep -q curl; then
-                                echo "curl not found, installing..."
-                                sudo apt install curl -y
-                            else
-                                echo "curl is already installed, skipping installation."
-                            fi
-                        """
-                }                        
             }
         }
-
         stage("Docker frontend app build") {
             steps {
-                dir("${env.BUILD_NUMBER}/app/backend") {
+                dir("${env.BUILD_NUMBER}/app/frontend") {
                     sh "docker build -t social-media-scraper_frontend:${env.BUILD_NUMBER} ."
                 }
             }
         }
-        stage("Docker run validation") {
+        stage("Docker frontend run validation") {
             steps {
                 dir("${env.BUILD_NUMBER}/app/backend") {
                     sh """
@@ -100,8 +85,6 @@ pipeline{
                 }
             }
         }
-
-
         stage("Docker frontend push to Docker Hub") {
             steps {
                 sh """
