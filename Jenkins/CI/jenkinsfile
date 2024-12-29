@@ -144,13 +144,15 @@ pipeline {
                 }
             }
         }
-
+###################### only for new frontend #########################
         stage("Docker frontend app build") {
             steps {
                 if(params.build_frontend == 'True'){
                     dir("${env.BUILD_NUMBER}/app/frontend") {
                         sh "docker build -t social-media-scraper_frontend:${env.BUILD_NUMBER} ."
                     }
+                } else {
+                    echo ' NOT building the frontend docker'
                 }
             }
         }
@@ -170,6 +172,8 @@ pipeline {
                     // sh """
                     // docker run --name social-media-scraper_${env.BUILD_NUMBER} -d -p 5000:5000 --network jenkins_env --link mongodb:mongodb -e MONGO_URI=mongodb://mongodb:27017/social_media social-media-scraper:${env.BUILD_NUMBER}
                     // """
+                } else {
+                    echo ' NOT running the frontend docker'
                 }
             }
         }
@@ -195,8 +199,6 @@ pipeline {
                 }
             }
         }
-
-    }
     post {
         always {
             echo "========always========"
