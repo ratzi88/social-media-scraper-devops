@@ -1,74 +1,218 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage("Clonning app"){
-            steps{
+    stages {
+        stage("Cloning app") {
+            steps {
                 echo "========app clone========"
-                echo "${env.BUILD_ID}"
-                echo "${env.BUILD_NUMBER}"
-
-                dir("${env.BUILD_NUMBER}") {
-                    // git branch: 'main', credentialsId: 'b4a3c35c-aa99-4abe-8aea-9d83f979cb76', url: 'https://github.com/ratzi88/social-media-scraper-devops'
-                    git branch: 'main', credentialsId: 'b4a3c35c-aa99-4abe-8aea-9d83f979cb76', url: 'https://github.com/ratzi88/social-media-scraper.git'
+                dir("${env.BUILD_NUMBER}/app") {
+                    git branch: 'main',
+                        credentialsId: '49bd9cd6-738c-4792-a6aa-fc25cffb434c',
+                        url: 'https://github.com/ratzi88/social-media-scraper'
                 }
             }
-            post{
-                always{
+            post {
+                always {
                     echo "========always========"
                 }
-                success{
+                success {
+                    sh "rm -rf ${env.BUILD_NUMBER}-1"
+                    sh "rm -rf Jenkins README.md .git"
                     dir("${env.BUILD_NUMBER}") {
-                        sh "git rm -rf jenkinsfile"
-                        sh "git rm -rf README.md"
-                        // sh "git rm -rf .git"
+                        sh "rm -rf Jenkins README.md .git"
                     }
                 }
-                failure{
+                failure {
                     echo "========A execution failed========"
                 }
             }
         }
-        stage("apt update upgrade"){
-            steps{
+        stage("apt update upgrade") {
+            steps {
                 sh "sudo apt update && sudo apt upgrade -y"
-                }
-        }
-        stage("Verifications"){
-            parallel{
-                stage("python installing"){
-                    steps{
-                        echo "sudo apt install -y python3.11"
-                    }
-                }
-                stage("Other installing"){
-                    steps{
-                        echo "2222"
-                    }
-                }                        
             }
         }
-
-        // stage("Docker build"){
-        //     steps{
-        //         dir("${env.BUILD_NUMBER}/backend"){
-        //             sh "docker build -t python-app ."
-        //         }
-        //     }
-        // }
-
-
-
+        stage("Verifications") {
+            parallel {
+                stage("Python Installing") {
+                    steps {
+                        sh "sudo apt install python3.11 -y"
+                    }
+                }
+                stage("Curl Installing") {
+                    steps {
+                        sh """
+                        if ! dpkg -l | grep -q curl; then
+                            echo "curl not found, installing..."
+                            sudo apt install curl -y
+                        else
+                            echo "curl is already installed, skipping installation."
+                        fi
+                        """
+                    }
+                }
+            }
+        }
+        stage("Docker run MongoDB") {
+            steps {
+                dir("${env.BUILD_NUMBER}/app/") {
+                    sh """
+                    docker run --name mongodb -d -p 27017:27017 \
+                    -v mongodb_data:/data/db \
+                    --network jenkins_env \
+                    -v init-capped-collection.js:/docker-entrypoint-initdb.d/init-capped-collection.js \
+                    mongo:5.0
+                    """
+                    sleep 15
+                }
+            }
+        }
+        stage("Docker app build") {
+            steps {
+                dir("${env.BUILD_NUMBER}/app/backend") {
+                    sh "docker build -t social-media-scraper:${env.BUILD_NUMBER} ."
+                }
+            }
+        }
+        stage("Docker run validation") {
+            steps {
+                dir("${env.BUILD_NUMBER}/app/backend") {
+                    sh """
+                    docker run -d -p 5000:5000 \
+                    --network jenkins_env \
+                    --name social-media-scraper_${env.BUILD_NUMBER} \
+                    -e MONGO_URI='mongodb://mongodb:27017/social_media' \
+                    social-media-scraper:${env.BUILD_NUMBER}
+                    """
+                }
+            }
+        }
+        stage("Sanity test") {
+            steps {
+                dir("${env.BUILD_NUMBER}/app/frontend") {
+                    retry(3) {
+                        sleep 5
+                        script {
+                            // Capture the output of the curl command
+                            def response = sh(script: """
+                                curl -X POST -H "Content-Type: application/json" \
+                                -d '{"name": "Hothaifa Zoubi"}' \
+                                http://social-media-scraper_${env.BUILD_NUMBER}:5000/search
+                            """, returnStdout: true).trim()
+                            echo response
+                            // Check if the response contains the expected LinkedIn URL
+                             if (response.contains('"linkedin": "https://il.linkedin.com/in/hothaifa-zoubi-894b10223"')) {
+                                echo "Sanity passed: Hodi LinkedIn was found: https://il.linkedin.com/in/hothaifa-zoubi-894b10223"
+                            } else {
+                                error "Validation failed: LinkedIn URL not found in response."
+                            }
+                        }
+                    }
+                }
+            }
+            // steps {
+            //     dir("${env.BUILD_NUMBER}/app/frontend") {
+            //         retry(3) {
+            //             sleep 10
+            //             sh """
+            //             curl -X POST -H "Content-Type: application/json" \
+            //             -d '{"name": "Hothaifa Zoubi"}' \
+            //             http://social-media-scraper_${env.BUILD_NUMBER}:5000/search
+            //             """
+            //         }
+            //     }
+            // }
+            post {
+                always {
+                    echo "====++++always++++===="
+                    sh """
+                    docker stop social-media-scraper_${env.BUILD_NUMBER}
+                    docker rm social-media-scraper_${env.BUILD_NUMBER}
+                    docker stop mongodb
+                    docker rm mongodb
+                    """
+                }
+                failure {
+                    echo "====++++only when failed++++===="
+                }
+            }
+        }
+        stage("Docker push to Docker Hub") {
+            steps {
+                sh """
+                docker tag social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:${env.BUILD_NUMBER}
+                docker tag social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:latest
+                docker push sframir/social-media-scraper:${env.BUILD_NUMBER}
+                docker push sframir/social-media-scraper:latest
+                """
+            }
+            post {
+                always {
+                    sh "docker rmi social-media-scraper:${env.BUILD_NUMBER}"
+                }
+            }
+        }
+        stage("Docker frontend app build") {
+            steps {
+                script {
+                    if (params.build_frontend) {
+                        dir("${env.BUILD_NUMBER}/app/frontend") {
+                            sh "docker build -t social-media-scraper_frontend:${env.BUILD_NUMBER} ."
+                        }
+                    } else {
+                        echo 'NOT building the frontend docker'
+                    }
+                }
+            }
+        }
+        stage("Docker frontend run validation") {
+            steps {
+                script {
+                    if (params.build_frontend) {
+                        dir("${env.BUILD_NUMBER}/app/frontend") {
+                            sh """
+                            docker run -d -p 3000:80 \
+                            --network jenkins_env \
+                            --name social-media-scraper_frontend_${env.BUILD_NUMBER} \
+                            -e MONGO_URI='mongodb://mongodb:27017/social_media' \
+                            social-media-scraper_frontend:${env.BUILD_NUMBER}
+                            """
+                        }
+                    } else {
+                        echo 'NOT running the frontend docker'
+                    }
+                }
+            }
+        }
+        stage("Docker frontend push to Docker Hub") {
+            steps {
+                script {
+                    if (params.build_frontend) {
+                        sh """
+                        docker tag social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
+                        docker tag social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:latest
+                        docker push sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
+                        docker push sframir/social-media-scraper_frontend:latest
+                        """
+                        sh """
+                        docker stop social-media-scraper_frontend_${env.BUILD_NUMBER}
+                        docker rm social-media-scraper_frontend_${env.BUILD_NUMBER}
+                        """
+                        sh "docker rmi social-media-scraper_frontend:${env.BUILD_NUMBER}"
+                    } else {
+                        echo 'NOT pushing the frontend docker'
+                    }
+                }
+            }
+        }
     }
-    post{
-        always{
-            echo "========always========"
+    post {
+        success {
+            echo "========social-media-ci successfully completed========"
+            build wait: false, propagate: false, 
+                job: 'CD-social-media-scraper', waitForStart: true
         }
-        success{
-            echo "========social-media-ci successfully ========"
-            build 'social-media-cd', wait: false
-        }
-        failure{
-            echo "========pipeline execution failed========"
+        failure {
+            echo "========CI failed========"
         }
     }
 }
