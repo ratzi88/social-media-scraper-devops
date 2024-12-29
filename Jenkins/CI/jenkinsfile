@@ -349,7 +349,7 @@ pipeline {
         stage("Docker frontend app build") {
             steps {
                 script {
-                    if (params.build_frontend == 'True') {
+                    if (params.build_frontend == 'true') {
                         dir("${env.BUILD_NUMBER}/app/frontend") {
                             sh "docker build -t social-media-scraper_frontend:${env.BUILD_NUMBER} ."
                         }
@@ -362,7 +362,7 @@ pipeline {
         stage("Docker frontend run validation") {
             steps {
                 script {
-                    if (params.build_frontend == 'True') {
+                    if (params.build_frontend == 'true') {
                         dir("${env.BUILD_NUMBER}/app/frontend") {
                             sh """
                             docker run -d -p 3000:80 \
@@ -381,7 +381,7 @@ pipeline {
         stage("Docker frontend push to Docker Hub") {
             steps {
                 script {
-                    if (params.build_frontend == 'True') {
+                    if (params.build_frontend == 'true') {
                         sh """
                         docker tag social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
                         docker tag social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:latest
