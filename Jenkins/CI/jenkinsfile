@@ -401,14 +401,13 @@ pipeline {
         }
     }
     post {
-        always {
-            echo "========always========"
-        }
         success {
             echo "========social-media-ci successfully completed========"
+            build wait: false, propagate: false, 
+                job: 'CD-social-media-scraper', waitForStart: true
         }
         failure {
-            echo "========pipeline execution failed========"
+            echo "========CI failed========"
         }
     }
 }
