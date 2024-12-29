@@ -146,7 +146,7 @@ pipeline {
                     if ! dpkg -l | grep -q wget; then
                         sudo apt install -y wget
                     fi
-                                 
+                                        
                     # Check if unzip is installed, install if missing
                     if ! dpkg -l | grep -q unzip; then
                         sudo apt install -y unzip
@@ -157,8 +157,13 @@ pipeline {
                         echo "Terraform not found, installing..."
 
                         # Get the latest Terraform version
-                        latest_version=\$(wget -qO- https://releases.hashicorp.com/index.json | jq -r '.versions[].version' | sort -V | tail -n 1)
+                        latest_version=\$(wget -qO- https://releases.hashicorp.com/terraform/index.json | jq -r '.versions[].version' | sort -V | tail -n 1)
+                        echo "Latest Terraform version: \$latest_version"  # Log the version being used
+
+                        # Attempt to download the latest Terraform version
                         wget https://releases.hashicorp.com/terraform/\${latest_version}/terraform_\${latest_version}_linux_amd64.zip
+                        
+                        # Unzip and move terraform binary to /usr/local/bin
                         unzip terraform_\${latest_version}_linux_amd64.zip
                         sudo mv terraform /usr/local/bin/
                         rm terraform_\${latest_version}_linux_amd64.zip  # Clean up zip file
@@ -171,6 +176,7 @@ pipeline {
                 """
             }
         }
+
         stage("A") {
             steps {
                 echo "====++++executing A++++===="
