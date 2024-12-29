@@ -57,21 +57,20 @@ pipeline{
                         terraform --version
                     """
             }
-            stage("A"){
-                steps{
-                    echo "====++++executing A++++===="
+        }
+        stage("A"){
+            steps{
+                echo "====++++executing A++++===="
+            }
+            post{
+                always{
+                    echo "====++++always++++===="
                 }
-                post{
-                    always{
-                        echo "====++++always++++===="
-                    }
-                    success{
-                        echo "====++++A executed successfully++++===="
-                    }
-                    failure{
-                        echo "====++++A execution failed++++===="
-                    }
-            
+                success{
+                    echo "====++++A executed successfully++++===="
+                }
+                failure{
+                    echo "====++++A execution failed++++===="
                 }
             }
         }
