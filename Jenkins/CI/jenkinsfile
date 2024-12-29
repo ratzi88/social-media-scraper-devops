@@ -90,7 +90,7 @@ pipeline {
             steps {
                 dir("${env.BUILD_NUMBER}/app/frontend") {
                     retry(3) {
-                        sleep 10
+                        sleep 5
                         script {
                             // Capture the output of the curl command
                             def response = sh(script: """
