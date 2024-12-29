@@ -144,7 +144,7 @@ pipeline {
                 }
             }
         }
-###################### only for new frontend #########################
+// ###################### only for new frontend #########################
         stage("Docker frontend app build") {
             steps {
                 if(params.build_frontend == 'True'){
@@ -186,7 +186,8 @@ pipeline {
                         docker push sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
                         docker push sframir/social-media-scraper_frontend:latest
                     """
-                }
+                } else {
+                    echo ' NOT need to delet the frontend docker'
             }
             post {
                 always {
