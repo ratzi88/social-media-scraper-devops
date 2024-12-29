@@ -101,7 +101,7 @@ pipeline {
                             
                             // Check if the response contains the expected LinkedIn URL
                              if (response.contains('"linkedin": "https://il.linkedin.com/in/hothaifa-zoubi-894b10223"')) {
-                                echo "Sanity passed: HodiLinkedIn URL found in response: https://il.linkedin.com/in/hothaifa-zoubi-894b10223"
+                                echo "Sanity passed: Hodi LinkedIn was found: https://il.linkedin.com/in/hothaifa-zoubi-894b10223"
                             } else {
                                 error "Validation failed: LinkedIn URL not found in response."
                             }
