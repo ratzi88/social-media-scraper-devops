@@ -161,12 +161,13 @@ pipeline {
                 echo "====++++executing A++++===="
                 sh "date"
                 sh "pwd"
-                sshCommand([
+                sshCommand remote: [
+                    name: 'remote-host-name', // Defined in Jenkins Manage Jenkins -> Configure System -> SSH remote hosts
                     host: '3.70.39.129',
-                    username: 'ubuntu',
+                    user: 'ubuntu',
                     identityFile: '/var/jenkins_home/workspace/CD-social-media-scraper/Jenkins/CD/testing.pem',
-                    command: 'pwd'
-                ])                
+                ], command: 'pwd'
+              
             }
                 // script {
                 //     sshagent(credentials : ['jenkins-pem']) {
