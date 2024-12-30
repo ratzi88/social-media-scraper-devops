@@ -2,7 +2,7 @@
 pipeline {
     agent any
     stages {
-        stage("pem update premissions") {
+        stage("pem  premissions update") {
             steps {
                 sh """
                   chmod 600 /var/jenkins_home/secrets/testing.pem
@@ -13,12 +13,12 @@ pipeline {
         stage("update k8s from git") {
             steps {
                 sh """
-                // ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 kubectl "cd /home/ubuntu/social-media-scraper && git pull"
+                # ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 kubectl "cd /home/ubuntu/social-media-scraper && git pull"
                 date
                   """
             }
        }
-        stage("k8s update") {
+        stage("k8s kubectl apply all") {
             steps {
                 echo "====++++executing A++++===="
                 sh """
