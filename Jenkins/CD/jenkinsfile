@@ -16,8 +16,8 @@ pipeline {
                 sh """
                 ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
                 kubectl get svc \
-                $$ date \
-                $$ pwd
+                && date \
+                && pwd
 
                 """
 
