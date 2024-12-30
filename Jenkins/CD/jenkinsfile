@@ -129,11 +129,11 @@ pipeline {
                 }
             }
         }
-        stage("apt update upgrade") {
-            steps {
-                sh "sudo apt update && sudo apt upgrade -y"
-            }
-        }
+        // stage("apt update upgrade") {
+        //     steps {
+        //         sh "sudo apt update && sudo apt upgrade -y"
+        //     }
+        // }
         // stage("terraform installing") {
         //     steps {
         //         sh """
@@ -168,11 +168,18 @@ pipeline {
                     pwd
                     date
                 """
+                script {
+                     sshagent(credentials : ['/var/jenkins_home/secrets/testing.pem']) {
+                        sh "echo pwd"
+                        sh 'ssh -t -t ubuntu@3.70.39.129 -o StrictHostKeyChecking=no'
+                        sh "pwd"
+                     }
+                }
                 sshCommand remote: [
                     host: '3.70.39.129',
                     user: 'ubuntu',
                     identityFile: '/var/jenkins_home/secrets/testing.pem'
-                    ], command: 'pwd'
+                ], command: 'pwd'
 
 
 
