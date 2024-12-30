@@ -15,7 +15,9 @@ pipeline {
                 echo "====++++executing A++++===="
                 sh "ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 kubectl get svc"
                 sh """
-                    ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 kubectl patch svc kubernetes -p '{"spec": {"externalIPs": ["10.96.0.1"]}}'
+                    ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
+                    kubectl patch svc kubernetes -p '{"spec": {"externalIPs": ["10.96.0.1"]}}'
+
                 """
                 sh "ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 kubectl get svc"
                 sh "pwd"
