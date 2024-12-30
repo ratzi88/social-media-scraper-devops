@@ -180,13 +180,16 @@ pipeline {
         stage("k8s update") {
             steps {
                 echo "====++++executing A++++===="
+                sh "date"
+                sh "pwd"
                 sshagent(['c80b552a-e358-4c71-87c8-89b328937b08']) {
-                sh "echo pwd"
+                sh "pwd"
                 sh "whoami"
+                sh "date"
                 }
                 // script {
                 //     sshagent(credentials : ['jenkins-pem']) {
-                //         sh "echo pwd"
+                //         sh "pwd"
                 //         sh 'ssh -t -t ubuntu@3.70.39.129 -o StrictHostKeyChecking=no'
                 //         sh "echo pwd"
                 //     }
