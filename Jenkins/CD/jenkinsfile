@@ -180,6 +180,10 @@ pipeline {
         stage("k8s update") {
             steps {
                 echo "====++++executing A++++===="
+                sshagent(['c80b552a-e358-4c71-87c8-89b328937b08']) {
+                sh "echo pwd"
+                sh "whoami"
+                }
                 script {
                     sshagent(credentials : ['jenkins-pem']) {
                         sh "echo pwd"
