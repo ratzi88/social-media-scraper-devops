@@ -161,12 +161,25 @@ pipeline {
                 echo "====++++executing A++++===="
                 sh "date"
                 sh "pwd"
-                sshCommand remote: [
-                    name: 'remote-host-name', // Defined in Jenkins Manage Jenkins -> Configure System -> SSH remote hosts
-                    host: '3.70.39.129',
-                    user: 'ubuntu',
-                    identityFile: '/var/jenkins_home/workspace/CD-social-media-scraper/Jenkins/CD/testing.pem',
-                ], command: 'pwd'
+                sh """
+                    chmod 600 /var/jenkins_home/secrets/testing.pem
+                    chown jenkins:jenkins /var/jenkins_home/secrets/testing.pem
+                    ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129
+                    pwd
+                    date
+                """
+
+
+
+
+
+
+                // sshCommand remote: [
+                //     name: 'remote-host-name', // Defined in Jenkins Manage Jenkins -> Configure System -> SSH remote hosts
+                //     host: '3.70.39.129',
+                //     user: 'ubuntu',
+                //     identityFile: '/var/jenkins_home/workspace/CD-social-media-scraper/Jenkins/CD/testing.pem',
+                // ], command: 'pwd'
               
             }
                 // script {
