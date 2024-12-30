@@ -2,7 +2,7 @@
 pipeline {
     agent any
     stages {
-        stage("k8s update") {
+        stage("pem update premissions") {
             steps {
                 sh """
                   chmod 600 /var/jenkins_home/secrets/testing.pem
