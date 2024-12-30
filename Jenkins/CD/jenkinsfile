@@ -182,10 +182,10 @@ pipeline {
                 echo "====++++executing A++++===="
                 sh "date"
                 sh "pwd"
-                sshagent(['c80b552a-e358-4c71-87c8-89b328937b08']) {
-                sh "pwd"
-                sh "whoami"
-                sh "date"
+                sshagent(ubuntu ['c80b552a-e358-4c71-87c8-89b328937b08']) {
+                    sh "pwd"
+                    sh "whoami"
+                    sh "date"
                 }
                 // script {
                 //     sshagent(credentials : ['jenkins-pem']) {
