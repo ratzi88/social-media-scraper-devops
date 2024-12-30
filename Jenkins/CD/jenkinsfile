@@ -134,7 +134,7 @@ pipeline {
                 sh "sudo apt update && sudo apt upgrade -y"
             }
         }
-        stage("terraform installing") {
+        // stage("terraform installing") {
             steps {
                 sh """
                     # Ensure jq is installed to parse JSON
