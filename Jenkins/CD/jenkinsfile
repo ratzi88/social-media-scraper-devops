@@ -184,13 +184,13 @@ pipeline {
                 sh "echo pwd"
                 sh "whoami"
                 }
-                script {
-                    sshagent(credentials : ['jenkins-pem']) {
-                        sh "echo pwd"
-                        sh 'ssh -t -t ubuntu@3.70.39.129 -o StrictHostKeyChecking=no'
-                        sh "echo pwd"
-                    }
-                 }
+                // script {
+                //     sshagent(credentials : ['jenkins-pem']) {
+                //         sh "echo pwd"
+                //         sh 'ssh -t -t ubuntu@3.70.39.129 -o StrictHostKeyChecking=no'
+                //         sh "echo pwd"
+                //     }
+                //  }
              }
          }     
     }
