@@ -62,7 +62,7 @@ pipeline {
                     -v init-capped-collection.js:/docker-entrypoint-initdb.d/init-capped-collection.js \
                     mongo:5.0
                     """
-                    sleep 15
+                    sleep 10
                 }
             }
         }
@@ -90,7 +90,7 @@ pipeline {
             steps {
                 dir("${env.BUILD_NUMBER}/app/frontend") {
                     retry(3) {
-                        sleep 10
+                        sleep 5
                         script {
                             // Capture the output of the curl command
                             def response = sh(script: """
@@ -109,27 +109,15 @@ pipeline {
                     }
                 }
             }
-            // steps {
-            //     dir("${env.BUILD_NUMBER}/app/frontend") {
-            //         retry(3) {
-            //             sleep 10
-            //             sh """
-            //             curl -X POST -H "Content-Type: application/json" \
-            //             -d '{"name": "Hothaifa Zoubi"}' \
-            //             http://social-media-scraper_${env.BUILD_NUMBER}:5000/search
-            //             """
-            //         }
-            //     }
-            // }
             post {
                 always {
                     echo "====++++always++++===="
-                    // sh """
-                    // docker stop social-media-scraper_${env.BUILD_NUMBER}
-                    // docker rm social-media-scraper_${env.BUILD_NUMBER}
-                    // docker stop mongodb
-                    // docker rm mongodb
-                    // """
+                    sh """
+                    docker stop social-media-scraper_${env.BUILD_NUMBER}
+                    docker rm social-media-scraper_${env.BUILD_NUMBER}
+                    docker stop mongodb
+                    docker rm mongodb
+                    """
                 }
                 failure {
                     echo "====++++only when failed++++===="
