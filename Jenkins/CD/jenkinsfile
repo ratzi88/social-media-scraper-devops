@@ -129,11 +129,11 @@ pipeline {
                 }
             }
         }
-        stage("apt update upgrade") {
-            steps {
-                sh "sudo apt update && sudo apt upgrade -y"
-            }
-        }
+        // stage("apt update upgrade") {
+        //     steps {
+        //         sh "sudo apt update && sudo apt upgrade -y"
+        //     }
+        // }
         // stage("terraform installing") {
         //     steps {
         //         sh """
