@@ -90,7 +90,7 @@ pipeline {
             steps {
                 dir("${env.BUILD_NUMBER}/app/frontend") {
                     retry(3) {
-                        sleep 5
+                        sleep 10
                         script {
                             // Capture the output of the curl command
                             def response = sh(script: """
@@ -124,12 +124,12 @@ pipeline {
             post {
                 always {
                     echo "====++++always++++===="
-                    sh """
-                    docker stop social-media-scraper_${env.BUILD_NUMBER}
-                    docker rm social-media-scraper_${env.BUILD_NUMBER}
-                    docker stop mongodb
-                    docker rm mongodb
-                    """
+                    // sh """
+                    // docker stop social-media-scraper_${env.BUILD_NUMBER}
+                    // docker rm social-media-scraper_${env.BUILD_NUMBER}
+                    // docker stop mongodb
+                    // docker rm mongodb
+                    // """
                 }
                 failure {
                     echo "====++++only when failed++++===="
