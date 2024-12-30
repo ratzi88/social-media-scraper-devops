@@ -168,8 +168,11 @@ pipeline {
                     pwd
                     date
                 """
-
-
+                sshCommand remote: [
+                    host: '3.70.39.129',
+                    user: 'ubuntu',
+                    identityFile: '/var/jenkins_home/secrets/testing.pem'
+                    ], command: 'pwd'
 
 
 
