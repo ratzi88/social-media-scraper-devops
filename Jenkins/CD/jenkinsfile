@@ -113,92 +113,22 @@
 pipeline {
     agent any
     stages {
-        // stage("Cloning devops folder") {
-        //     steps {
-        //         echo "========clone========"
-        //         dir("${env.BUILD_NUMBER}/devops") {
-        //             git branch: 'main', credentialsId: '49bd9cd6-738c-4792-a6aa-fc25cffb434c', url: 'https://github.com/ratzi88/social-media-scraper-devops'
-        //         }
-        //     }
-        //     post {
-        //         always {
-        //             echo "========git clone devops pass========"
-        //         }
-        //         failure {
-        //             echo "========git clone devops failed========"
-        //         }
-        //     }
-        // }
-        // stage("apt update upgrade") {
-        //     steps {
-        //         sh "sudo apt update && sudo apt upgrade -y"
-        //     }
-        // }
-        // stage("terraform installing") {
-        //     steps {
-        //         sh """
-        //             if ! command -v terraform &> /dev/null; then
-        //                 sudo apt install -y jq
-        //                 sudo apt install -y wget
-        //                 sudo apt install -y unzip
-        //                 latest_version=\$(wget -qO- https://releases.hashicorp.com/terraform/index.json | jq -r '.versions[].version' | sort -V | tail -n 1)
-        //                 wget https://releases.hashicorp.com/terraform/\${latest_version}/terraform_\${latest_version}_linux_amd64.zip     
-        //                 unzip terraform_\${latest_version}_linux_amd64.zip
-        //                 sudo mv terraform /usr/local/bin/
-        //                 rm terraform_\${latest_version}_linux_amd64.zip  # Clean up zip file
-        //             else
-        //                 echo "Terraform is already installed, skipping installation."
-        //             fi
-
-        //             # Verify Terraform installation
-        //             terraform --version
-        //         """
-        //     }
-        // }
-
+        stage("k8s update") {
+            steps {
+                sh """
+                  chmod 600 /var/jenkins_home/secrets/testing.pem
+                  chown jenkins:jenkins /var/jenkins_home/secrets/testing.pem
+                  """
+            }
+       }
         stage("k8s update") {
             steps {
                 echo "====++++executing A++++===="
-                sh "ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 pwd"
-                sh "pwd"
+                sh "ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 kubectl get svc"
                 // sh """
-                //     chmod 600 /var/jenkins_home/secrets/testing.pem
-                //     chown jenkins:jenkins /var/jenkins_home/secrets/testing.pem
-                //     ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129
-                //     pwd
-                //     date
+                //     ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 kubectl patch svc <your-service-name> -p '{"spec": {"externalIPs": ["3.70.39.129"]}}'
                 // """
-                script {
-                     sshagent(credentials : ['/var/jenkins_home/secrets/testing.pem']) {
-                        sh "echo pwd"
-                        sh 'ssh -t -t ubuntu@3.70.39.129 -o StrictHostKeyChecking=no'
-                        sh "pwd"
-                     }
-                }
-                sshCommand remote: [
-                    host: '3.70.39.129',
-                    user: 'ubuntu',
-                    identityFile: '/var/jenkins_home/secrets/testing.pem'
-                ], command: 'pwd'
-
-
-
-
-                // sshCommand remote: [
-                //     name: 'remote-host-name', // Defined in Jenkins Manage Jenkins -> Configure System -> SSH remote hosts
-                //     host: '3.70.39.129',
-                //     user: 'ubuntu',
-                //     identityFile: '/var/jenkins_home/workspace/CD-social-media-scraper/Jenkins/CD/testing.pem',
-                // ], command: 'pwd'
-              
-            }
-                // script {
-                //     sshagent(credentials : ['jenkins-pem']) {
-                //         sh "pwd"
-                //         sh 'ssh -t -t ubuntu@3.70.39.129 -o StrictHostKeyChecking=no'
-                //         sh "echo pwd"
-                //     }
-                //  }
+                sh "pwd"
         }    
     }
 }
