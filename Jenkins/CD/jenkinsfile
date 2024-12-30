@@ -161,12 +161,12 @@ pipeline {
                         echo "Latest Terraform version: \$latest_version"  # Log the version being used
 
                         # Attempt to download the latest Terraform version
-                        wget https://releases.hashicorp.com/terraform/\${latest_version}/terraform_\${latest_version}_linux_amd64.zip
+                        #wget https://releases.hashicorp.com/terraform/\${latest_version}/terraform_\${latest_version}_linux_amd64.zip
                         
                         # Unzip and move terraform binary to /usr/local/bin
-                        unzip terraform_\${latest_version}_linux_amd64.zip
-                        sudo mv terraform /usr/local/bin/
-                        rm terraform_\${latest_version}_linux_amd64.zip  # Clean up zip file
+                        #unzip terraform_\${latest_version}_linux_amd64.zip
+                        #sudo mv terraform /usr/local/bin/
+                        #rm terraform_\${latest_version}_linux_amd64.zip  # Clean up zip file
                     else
                         echo "Terraform is already installed, skipping installation."
                     fi
@@ -177,17 +177,14 @@ pipeline {
             }
         }
 
-        stage("k8s") {
+        stage("k8s update") {
             steps {
                 echo "====++++executing A++++===="
                 script {
                     sshagent(credentials : ['jenkins-pem']) {
                         sh "echo pwd"
-                        sh 'ssh -t -t ubuntu@xx.xxx.xx.xx -o StrictHostKeyChecking=no'
+                        sh 'ssh -t -t ubuntu@3.70.39.129 -o StrictHostKeyChecking=no'
                         sh "echo pwd"
-                        sh 'sudo -i -u root'
-                        sh 'cd /opt/docker/web'
-                        sh 'echo pwd'
                     }
                  }
              }
