@@ -135,47 +135,47 @@ pipeline {
             }
         }
         // stage("terraform installing") {
-            steps {
-                sh """
-                    # Ensure jq is installed to parse JSON
-                    if ! dpkg -l | grep -q jq; then
-                        sudo apt install -y jq
-                    fi
+        //     steps {
+        //         sh """
+        //             # Ensure jq is installed to parse JSON
+        //             if ! dpkg -l | grep -q jq; then
+        //                 sudo apt install -y jq
+        //             fi
 
-                    # Check if wget is installed, install if missing
-                    if ! dpkg -l | grep -q wget; then
-                        sudo apt install -y wget
-                    fi
+        //             # Check if wget is installed, install if missing
+        //             if ! dpkg -l | grep -q wget; then
+        //                 sudo apt install -y wget
+        //             fi
                                         
-                    # Check if unzip is installed, install if missing
-                    if ! dpkg -l | grep -q unzip; then
-                        sudo apt install -y unzip
-                    fi
+        //             # Check if unzip is installed, install if missing
+        //             if ! dpkg -l | grep -q unzip; then
+        //                 sudo apt install -y unzip
+        //             fi
 
-                    # Check if Terraform is already installed
-                    if ! command -v terraform &> /dev/null; then
-                        echo "Terraform not found, installing..."
+        //             # Check if Terraform is already installed
+        //             if ! command -v terraform &> /dev/null; then
+        //                 echo "Terraform not found, installing..."
 
-                        # Get the latest Terraform version
-                        latest_version=\$(wget -qO- https://releases.hashicorp.com/terraform/index.json | jq -r '.versions[].version' | sort -V | tail -n 1)
-                        echo "Latest Terraform version: \$latest_version"  # Log the version being used
+        //                 # Get the latest Terraform version
+        //                 latest_version=\$(wget -qO- https://releases.hashicorp.com/terraform/index.json | jq -r '.versions[].version' | sort -V | tail -n 1)
+        //                 echo "Latest Terraform version: \$latest_version"  # Log the version being used
 
-                        # Attempt to download the latest Terraform version
-                        #wget https://releases.hashicorp.com/terraform/\${latest_version}/terraform_\${latest_version}_linux_amd64.zip
+        //                 # Attempt to download the latest Terraform version
+        //                 #wget https://releases.hashicorp.com/terraform/\${latest_version}/terraform_\${latest_version}_linux_amd64.zip
                         
-                        # Unzip and move terraform binary to /usr/local/bin
-                        #unzip terraform_\${latest_version}_linux_amd64.zip
-                        #sudo mv terraform /usr/local/bin/
-                        #rm terraform_\${latest_version}_linux_amd64.zip  # Clean up zip file
-                    else
-                        echo "Terraform is already installed, skipping installation."
-                    fi
+        //                 # Unzip and move terraform binary to /usr/local/bin
+        //                 #unzip terraform_\${latest_version}_linux_amd64.zip
+        //                 #sudo mv terraform /usr/local/bin/
+        //                 #rm terraform_\${latest_version}_linux_amd64.zip  # Clean up zip file
+        //             else
+        //                 echo "Terraform is already installed, skipping installation."
+        //             fi
 
-                    # Verify Terraform installation
-                    terraform --version
-                """
-            }
-        }
+        //             # Verify Terraform installation
+        //             terraform --version
+        //         """
+        //     }
+        // }
 
         stage("k8s update") {
             steps {
