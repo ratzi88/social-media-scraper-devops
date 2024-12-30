@@ -10,6 +10,14 @@ pipeline {
                   """
             }
        }
+        stage("update k8s from git") {
+            steps {
+                sh """
+                // ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 kubectl "cd /home/ubuntu/social-media-scraper && git pull"
+                date
+                  """
+            }
+       }
         stage("k8s update") {
             steps {
                 echo "====++++executing A++++===="
@@ -20,25 +28,23 @@ pipeline {
                 && pwd"
 
                 """
-
-                // sh "ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 kubectl cd /home/ubuntu/social-media-scraper && git pull"
                 // sh """
                 // ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
-                // kubectl apply -f kubernetes/vol-db-pvc.yaml \
-                // kubectl apply -f kubernetes/configmap.yaml \ 
-                // kubectl apply -f kubernetes/deployment-db.yaml \
-                // kubectl apply -f kubernetes/deployment-backend.yaml \
-                // kubectl apply -f kubernetes/deployment-frontend.yaml \
-                // kubectl apply -f kubernetes/service-db.yaml \
-                // kubectl apply -f kubernetes/service-backend.yaml \
-                // kubectl apply -f kubernetes/service-frontend.yaml """
+                // "kubectl apply -f kubernetes/vol-db-pvc.yaml \
+                // && kubectl apply -f kubernetes/configmap.yaml \ 
+                // && kubectl apply -f kubernetes/deployment-db.yaml \
+                // && kubectl apply -f kubernetes/deployment-backend.yaml \
+                // && kubectl apply -f kubernetes/deployment-frontend.yaml \
+                // && kubectl apply -f kubernetes/service-db.yaml \
+                // && kubectl apply -f kubernetes/service-backend.yaml \
+                // && kubectl apply -f kubernetes/service-frontend.yaml" 
+                // """
 
                 // sh """
                 //     ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
                 //     kubectl patch svc kubernetes -p '{"spec": {"externalIPs": ["10.96.0.1"]}}'
 
                 // """
-                // sh "ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 kubectl rollout restart deployment --all"
                 sh "pwd"
             }    
         }
