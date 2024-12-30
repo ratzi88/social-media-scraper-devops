@@ -113,22 +113,22 @@
 pipeline {
     agent any
     stages {
-        stage("Cloning devops folder") {
-            steps {
-                echo "========clone========"
-                dir("${env.BUILD_NUMBER}/devops") {
-                    git branch: 'main', credentialsId: '49bd9cd6-738c-4792-a6aa-fc25cffb434c', url: 'https://github.com/ratzi88/social-media-scraper-devops'
-                }
-            }
-            post {
-                always {
-                    echo "========git clone devops pass========"
-                }
-                failure {
-                    echo "========git clone devops failed========"
-                }
-            }
-        }
+        // stage("Cloning devops folder") {
+        //     steps {
+        //         echo "========clone========"
+        //         dir("${env.BUILD_NUMBER}/devops") {
+        //             git branch: 'main', credentialsId: '49bd9cd6-738c-4792-a6aa-fc25cffb434c', url: 'https://github.com/ratzi88/social-media-scraper-devops'
+        //         }
+        //     }
+        //     post {
+        //         always {
+        //             echo "========git clone devops pass========"
+        //         }
+        //         failure {
+        //             echo "========git clone devops failed========"
+        //         }
+        //     }
+        // }
         // stage("apt update upgrade") {
         //     steps {
         //         sh "sudo apt update && sudo apt upgrade -y"
@@ -159,15 +159,15 @@ pipeline {
         stage("k8s update") {
             steps {
                 echo "====++++executing A++++===="
-                sh "date"
+                sh "ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 pwd"
                 sh "pwd"
-                sh """
-                    chmod 600 /var/jenkins_home/secrets/testing.pem
-                    chown jenkins:jenkins /var/jenkins_home/secrets/testing.pem
-                    ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 -y
-                    pwd
-                    date
-                """
+                // sh """
+                //     chmod 600 /var/jenkins_home/secrets/testing.pem
+                //     chown jenkins:jenkins /var/jenkins_home/secrets/testing.pem
+                //     ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129
+                //     pwd
+                //     date
+                // """
                 script {
                      sshagent(credentials : ['/var/jenkins_home/secrets/testing.pem']) {
                         sh "echo pwd"
