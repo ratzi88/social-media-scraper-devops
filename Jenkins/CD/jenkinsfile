@@ -164,7 +164,7 @@ pipeline {
                 sh """
                     chmod 600 /var/jenkins_home/secrets/testing.pem
                     chown jenkins:jenkins /var/jenkins_home/secrets/testing.pem
-                    ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129
+                    ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 -y
                     pwd
                     date
                 """
