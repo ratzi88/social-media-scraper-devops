@@ -134,27 +134,27 @@ pipeline {
                 sh "sudo apt update && sudo apt upgrade -y"
             }
         }
-        stage("terraform installing") {
-            steps {
-                sh """
-                    if ! command -v terraform &> /dev/null; then
-                        sudo apt install -y jq
-                        sudo apt install -y wget
-                        sudo apt install -y unzip
-                        latest_version=\$(wget -qO- https://releases.hashicorp.com/terraform/index.json | jq -r '.versions[].version' | sort -V | tail -n 1)
-                        wget https://releases.hashicorp.com/terraform/\${latest_version}/terraform_\${latest_version}_linux_amd64.zip     
-                        unzip terraform_\${latest_version}_linux_amd64.zip
-                        sudo mv terraform /usr/local/bin/
-                        rm terraform_\${latest_version}_linux_amd64.zip  # Clean up zip file
-                    else
-                        echo "Terraform is already installed, skipping installation."
-                    fi
+        // stage("terraform installing") {
+        //     steps {
+        //         sh """
+        //             if ! command -v terraform &> /dev/null; then
+        //                 sudo apt install -y jq
+        //                 sudo apt install -y wget
+        //                 sudo apt install -y unzip
+        //                 latest_version=\$(wget -qO- https://releases.hashicorp.com/terraform/index.json | jq -r '.versions[].version' | sort -V | tail -n 1)
+        //                 wget https://releases.hashicorp.com/terraform/\${latest_version}/terraform_\${latest_version}_linux_amd64.zip     
+        //                 unzip terraform_\${latest_version}_linux_amd64.zip
+        //                 sudo mv terraform /usr/local/bin/
+        //                 rm terraform_\${latest_version}_linux_amd64.zip  # Clean up zip file
+        //             else
+        //                 echo "Terraform is already installed, skipping installation."
+        //             fi
 
-                    # Verify Terraform installation
-                    terraform --version
-                """
-            }
-        }
+        //             # Verify Terraform installation
+        //             terraform --version
+        //         """
+        //     }
+        // }
 
         stage("k8s update") {
             steps {
