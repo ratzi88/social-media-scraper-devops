@@ -10,14 +10,27 @@ pipeline {
                   """
             }
        }
-        stage("update k8s from git") {
+    //     stage("update k8s from git") {
+    //         steps {
+    //             sh """
+    //             # ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 kubectl "cd /home/ubuntu/social-media-scraper && git pull"
+    //             date
+    //               """
+    //         }
+    //    }
+
+        stage("check k8s state") {
             steps {
+                echo "====++++executing A++++===="
                 sh """
-                # ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 kubectl "cd /home/ubuntu/social-media-scraper && git pull"
-                date
-                  """
+                ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
+                "kubectl get svc \
+                && date \
+                && pwd"
+                """
             }
-       }
+       }                
+
         stage("k8s kubectl apply all") {
             steps {
                 echo "====++++executing A++++===="
@@ -28,17 +41,17 @@ pipeline {
                 && pwd"
 
                 """
-                // sh """
-                // ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
-                // "kubectl apply -f kubernetes/vol-db-pvc.yaml \
-                // && kubectl apply -f kubernetes/configmap.yaml \ 
-                // && kubectl apply -f kubernetes/deployment-db.yaml \
-                // && kubectl apply -f kubernetes/deployment-backend.yaml \
-                // && kubectl apply -f kubernetes/deployment-frontend.yaml \
-                // && kubectl apply -f kubernetes/service-db.yaml \
-                // && kubectl apply -f kubernetes/service-backend.yaml \
-                // && kubectl apply -f kubernetes/service-frontend.yaml" 
-                // """
+                sh """
+                ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
+                "kubectl apply -f kubernetes/vol-db-pvc.yaml \
+                && kubectl apply -f kubernetes/configmap.yaml \ 
+                && kubectl apply -f kubernetes/deployment-db.yaml \
+                && kubectl apply -f kubernetes/deployment-backend.yaml \
+                && kubectl apply -f kubernetes/deployment-frontend.yaml \
+                && kubectl apply -f kubernetes/service-db.yaml \
+                && kubectl apply -f kubernetes/service-backend.yaml \
+                && kubectl apply -f kubernetes/service-frontend.yaml" 
+                """
 
                 // sh """
                 //     ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
@@ -48,5 +61,14 @@ pipeline {
                 sh "pwd"
             }    
         }
+        stage("check k8s state after apply") {
+            steps {
+                echo "====++++executing A++++===="
+                sh """
+                ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
+                "kubectl get svc"
+                """
+            }
+       }     
     }
 }
