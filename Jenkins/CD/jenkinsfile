@@ -63,12 +63,12 @@ pipeline {
                 "kubectl get svc"
                 """
             }
-       }
-       post{
-           always{
-               echo "====++++always++++===="
-               cleanWs()
-           }
-       }     
+       }  
     }
+    post{
+        always{
+            echo "====++++always++++===="
+            cleanWs()
+        }
+    }   
 }
