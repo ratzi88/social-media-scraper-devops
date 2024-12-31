@@ -18,7 +18,7 @@ pipeline {
         stage("update k8s from git") {
             steps {
                 sh """
-                ssh -i ${PEM_PATH} ubuntu@3.70.39.129 kubectl "cd /home/ubuntu/social-media-scraper && git pull"
+                ssh -i ${PEM_PATH} ubuntu@3.70.39.129 "cd /home/ubuntu/social-media-scraper && git pull"
                   """
             }
        }
