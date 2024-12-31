@@ -10,21 +10,6 @@ pipeline {
                         url: 'https://github.com/ratzi88/social-media-scraper'
                 }
             }
-            post {
-                always {
-                    echo "========always========"
-                }
-                success {
-                    sh "rm -rf ${env.BUILD_NUMBER}-1"
-                    sh "rm -rf Jenkins README.md .git"
-                    dir("${env.BUILD_NUMBER}") {
-                        sh "rm -rf Jenkins README.md .git"
-                    }
-                }
-                failure {
-                    echo "========A execution failed========"
-                }
-            }
         }
         stage("apt update upgrade") {
             steps {
@@ -194,6 +179,10 @@ pipeline {
         }
     }
     post {
+        always{
+            echo "====++++clean workspace++++===="
+            cleanWs()
+        }
         success {
             echo "========social-media-ci successfully completed========"
             build wait: false, propagate: false, 
