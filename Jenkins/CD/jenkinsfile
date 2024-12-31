@@ -63,7 +63,7 @@ pipeline {
         stage("rollout restart deployment") {
             steps {
                 sh """
-                ssh -i ${PEM_PATH} ubuntu@3.70.39.129 kubectl \
+                ssh -i ${PEM_PATH} ubuntu@3.70.39.129 \
                 "kubectl rollout restart deployment app-backend-deployment \
                 && kubectl rollout restart deployment app-frontend-deployment"
                   """
