@@ -43,14 +43,14 @@ pipeline {
                 // """
                 sh """
                 ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
-                "kubectl apply -f kubernetes/vol-db-pvc.yaml \
-                && kubectl apply -f kubernetes/configmap.yaml \
-                && kubectl apply -f kubernetes/deployment-db.yaml \
-                && kubectl apply -f kubernetes/deployment-backend.yaml \
-                && kubectl apply -f kubernetes/deployment-frontend.yaml \
-                && kubectl apply -f kubernetes/service-db.yaml \
-                && kubectl apply -f kubernetes/service-backend.yaml \
-                && kubectl apply -f kubernetes/service-frontend.yaml" 
+                "kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/vol-db-pvc.yaml \
+                && kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/configmap.yaml \
+                && kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/deployment-db.yaml \
+                && kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/deployment-backend.yaml \
+                && kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/deployment-frontend.yaml \
+                && kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/service-db.yaml \
+                && kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/service-backend.yaml \
+                && kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/service-frontend.yaml" 
                 """
 
                 // sh """
