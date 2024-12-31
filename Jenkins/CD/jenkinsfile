@@ -1,19 +1,22 @@
 
 pipeline {
     agent any
+    environment {
+        PEM_PATH = '/var/jenkins_home/secrets/testing.pem'
+    }
     stages {
         stage("pem  premissions update") {
             steps {
                 sh """
-                  chmod 600 /var/jenkins_home/secrets/testing.pem
-                  chown jenkins:jenkins /var/jenkins_home/secrets/testing.pem
+                  chmod 600 ${PEM_PATH}
+                  chown jenkins:jenkins  ${PEM_PATH}
                   """
             }
        }
     //     stage("update k8s from git") {
     //         steps {
     //             sh """
-    //             # ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 kubectl "cd /home/ubuntu/social-media-scraper && git pull"
+    //             # ssh -i  ${PEM_PATH} ubuntu@3.70.39.129 kubectl "cd /home/ubuntu/social-media-scraper && git pull"
     //             date
     //               """
     //         }
@@ -23,7 +26,7 @@ pipeline {
             steps {
                 echo "====++++executing A++++===="
                 sh """
-                ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
+                ssh -i  ${PEM_PATH} ubuntu@3.70.39.129 \
                 "kubectl get svc \
                 && date \
                 && pwd"
