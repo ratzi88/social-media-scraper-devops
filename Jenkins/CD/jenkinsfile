@@ -72,6 +72,7 @@ pipeline {
         stage("check k8s state after apply") {
             steps {
                 echo "====++++executing A++++===="
+                sleep 10
                 sh """
                 ssh -i ${PEM_PATH} ubuntu@3.70.39.129 \
                 "kubectl get all"
