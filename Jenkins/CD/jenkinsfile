@@ -18,8 +18,7 @@ pipeline {
         stage("update k8s from git") {
             steps {
                 sh """
-                # ssh -i ${PEM_PATH} ubuntu@3.70.39.129 kubectl "cd /home/ubuntu/social-media-scraper && git pull"
-                date
+                ssh -i ${PEM_PATH} ubuntu@3.70.39.129 kubectl "cd /home/ubuntu/social-media-scraper && git pull"
                   """
             }
        }
@@ -35,18 +34,6 @@ pipeline {
                 """
             }
        }
-
-
-        stage("rollout restart deployment") {
-            steps {
-                sh """
-                # ssh -i ${PEM_PATH} ubuntu@3.70.39.129 kubectl \
-                "kubectl rollout restart deployment app-backend-deployment \
-                && kubectl rollout restart deployment app-frontend-deployment"
-                  """
-            }
-       }
-
 
         stage("k8s kubectl apply all") {
             steps {
@@ -70,8 +57,18 @@ pipeline {
 
                 // """
                 sh "pwd"
+                sleep 40
             }    
         }
+        stage("rollout restart deployment") {
+            steps {
+                sh """
+                ssh -i ${PEM_PATH} ubuntu@3.70.39.129 kubectl \
+                "kubectl rollout restart deployment app-backend-deployment \
+                && kubectl rollout restart deployment app-frontend-deployment"
+                  """
+            }
+       }
         stage("check k8s state after apply") {
             steps {
                 echo "====++++executing A++++===="
