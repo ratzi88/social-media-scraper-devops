@@ -33,18 +33,18 @@ pipeline {
 
         stage("k8s kubectl apply all") {
             steps {
-                echo "====++++executing A++++===="
-                sh """
-                ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
-                "kubectl get svc \
-                && date \
-                && pwd"
+                // echo "====++++executing A++++===="
+                // sh """
+                // ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
+                // "kubectl get svc \
+                // && date \
+                // && pwd"
 
-                """
+                // """
                 sh """
                 ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
                 "kubectl apply -f kubernetes/vol-db-pvc.yaml \
-                && kubectl apply -f kubernetes/configmap.yaml \ 
+                && kubectl apply -f kubernetes/configmap.yaml \
                 && kubectl apply -f kubernetes/deployment-db.yaml \
                 && kubectl apply -f kubernetes/deployment-backend.yaml \
                 && kubectl apply -f kubernetes/deployment-frontend.yaml \
