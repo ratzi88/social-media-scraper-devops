@@ -3,6 +3,8 @@ pipeline {
     agent any
     environment {
         PEM_PATH = '/var/jenkins_home/secrets/testing.pem'
+        K8S_PATH = '/home/ubuntu/social-media-scraper/kubernetes'
+        K8S_APPLY = 'kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes'
     }
     stages {
         stage("pem  premissions update") {
@@ -16,7 +18,7 @@ pipeline {
     //     stage("update k8s from git") {
     //         steps {
     //             sh """
-    //             # ssh -i  ${PEM_PATH} ubuntu@3.70.39.129 kubectl "cd /home/ubuntu/social-media-scraper && git pull"
+    //             # ssh -i ${PEM_PATH} ubuntu@3.70.39.129 kubectl "cd /home/ubuntu/social-media-scraper && git pull"
     //             date
     //               """
     //         }
@@ -26,7 +28,7 @@ pipeline {
             steps {
                 echo "====++++executing A++++===="
                 sh """
-                ssh -i  ${PEM_PATH} ubuntu@3.70.39.129 \
+                ssh -i ${PEM_PATH} ubuntu@3.70.39.129 \
                 "kubectl get svc \
                 && date \
                 && pwd"
@@ -39,15 +41,15 @@ pipeline {
                 // echo "====k8s kubectl apply all===="
 
                 sh """
-                ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
-                "kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/vol-db-pvc.yaml \
-                && kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/configmap.yaml \
-                && kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/deployment-db.yaml \
-                && kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/deployment-backend.yaml \
-                && kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/deployment-frontend.yaml \
-                && kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/service-db.yaml \
-                && kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/service-backend.yaml \
-                && kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/service-frontend.yaml" 
+                ssh -i ${PEM_PATH} ubuntu@3.70.39.129 \
+                "kubectl apply -f ${K8S_PATH}/vol-db-pvc.yaml \
+                && kubectl apply -f ${K8S_PATH}/configmap.yaml \
+                && ${K8S_APPLY}/deployment-db.yaml \
+                && ${K8S_APPLY}/deployment-backend.yaml \
+                && ${K8S_APPLY}/deployment-frontend.yaml \
+                && ${K8S_APPLY}/service-db.yaml \
+                && ${K8S_APPLY}/service-backend.yaml \
+                && ${K8S_APPLY}/service-frontend.yaml" 
                 """
 
                 // sh """
@@ -62,7 +64,7 @@ pipeline {
             steps {
                 echo "====++++executing A++++===="
                 sh """
-                ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
+                ssh -i ${PEM_PATH} ubuntu@3.70.39.129 \
                 "kubectl get svc"
                 """
             }
