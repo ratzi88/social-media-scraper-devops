@@ -28,7 +28,7 @@ pipeline {
                 echo "====++++executing A++++===="
                 sh """
                 ssh -i ${PEM_PATH} ubuntu@3.70.39.129 \
-                "kubectl get svc \
+                "kubectl get all \
                 && date \
                 && pwd"
                 """
@@ -74,7 +74,7 @@ pipeline {
                 echo "====++++executing A++++===="
                 sh """
                 ssh -i ${PEM_PATH} ubuntu@3.70.39.129 \
-                "kubectl get svc"
+                "kubectl get all"
                 """
             }
        }  
