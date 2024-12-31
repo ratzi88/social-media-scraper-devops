@@ -33,14 +33,8 @@ pipeline {
 
         stage("k8s kubectl apply all") {
             steps {
-                // echo "====++++executing A++++===="
-                // sh """
-                // ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
-                // "kubectl get svc \
-                // && date \
-                // && pwd"
+                // echo "====k8s kubectl apply all===="
 
-                // """
                 sh """
                 ssh -i /var/jenkins_home/secrets/testing.pem ubuntu@3.70.39.129 \
                 "kubectl apply -f /home/ubuntu/social-media-scraper/kubernetes/vol-db-pvc.yaml \
@@ -69,6 +63,12 @@ pipeline {
                 "kubectl get svc"
                 """
             }
+       }
+       post{
+           always{
+               echo "====++++always++++===="
+               cleanWs()
+           }
        }     
     }
 }
