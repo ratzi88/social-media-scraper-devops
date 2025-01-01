@@ -79,7 +79,7 @@ pipeline {
                     --network jenkins_env \
                     --name sframir/social-media-scraper_${env.BUILD_NUMBER} \
                     -e MONGO_URI='mongodb://mongodb:27017/social_media' \
-                    social-media-scraper:${env.BUILD_NUMBER}
+                    sframir/social-media-scraper:${env.BUILD_NUMBER}
                     """
                 }
             }
