@@ -134,6 +134,7 @@ pipeline {
             post {
                 always {
                     sh "docker rmi social-media-scraper:${env.BUILD_NUMBER}"
+                    sh "docker rmi social-media-scraper:latest"
                 }
             }
         }
@@ -184,6 +185,7 @@ pipeline {
                         docker rm social-media-scraper_frontend_${env.BUILD_NUMBER}
                         """
                         sh "docker rmi social-media-scraper_frontend:${env.BUILD_NUMBER}"
+                        sh "docker rmi social-media-scraper_frontend:latest"
                     } else {
                         echo 'NOT pushing the frontend docker'
                     }
