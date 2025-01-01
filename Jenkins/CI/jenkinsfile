@@ -178,19 +178,22 @@ pipeline {
         }
         stage("Docker frontend push to Docker Hub") {
             steps {
-                script {
-                    if (params.build_frontend) {
-                        sh """
-                        docker tag social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
-                        docker push sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
-                        """
-                        sh """
-                        docker stop social-media-scraper_frontend_${env.BUILD_NUMBER}
-                        docker rm social-media-scraper_frontend_${env.BUILD_NUMBER}
-                        """
-                        sh "docker rmi social-media-scraper_frontend:${env.BUILD_NUMBER}"
-                    } else {
-                        echo 'NOT pushing the frontend docker'
+                retry(3) {
+                sleep 5
+                    script {
+                        if (params.build_frontend) {
+                            sh """
+                            docker tag social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
+                            docker push sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
+                            """
+                            sh """
+                            docker stop social-media-scraper_frontend_${env.BUILD_NUMBER}
+                            docker rm social-media-scraper_frontend_${env.BUILD_NUMBER}
+                            """
+                           // sh "docker rmi social-media-scraper_frontend:${env.BUILD_NUMBER}"
+                        } else {
+                            echo 'NOT pushing the frontend docker'
+                        }
                     }
                 }
             }
