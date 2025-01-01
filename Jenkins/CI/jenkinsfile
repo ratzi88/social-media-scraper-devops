@@ -182,7 +182,7 @@ pipeline {
                     if (params.build_frontend) {
                         sh """
                         docker tag social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
-                        docker push social-media-scraper_frontend:${env.BUILD_NUMBER}
+                        docker push sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
                         """
                         sh """
                         docker stop social-media-scraper_frontend_${env.BUILD_NUMBER}
