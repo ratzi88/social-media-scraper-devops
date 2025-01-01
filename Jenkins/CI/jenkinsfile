@@ -149,7 +149,7 @@ pipeline {
                 script {
                     if (params.build_frontend) {
                         dir("${env.BUILD_NUMBER}/app/frontend") {
-                            sh "docker build -t sframir/social-media-scraper_frontend:${env.BUILD_NUMBER} ."
+                            sh "docker build -t social-media-scraper_frontend:${env.BUILD_NUMBER} ."
                         }
                     } else {
                         echo 'NOT building the frontend docker'
