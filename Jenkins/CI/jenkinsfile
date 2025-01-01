@@ -124,12 +124,19 @@ pipeline {
         }
         stage("Docker push to Docker Hub") {
             steps {
+
                 sh """
                 docker tag social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:${env.BUILD_NUMBER}
                 docker push sframir/social-media-scraper:${env.BUILD_NUMBER}
-                docker tag social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:latest
-                docker push sframir/social-media-scraper:latest
+
                 """
+
+                // sh """
+                // docker tag social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:${env.BUILD_NUMBER}
+                // docker push sframir/social-media-scraper:${env.BUILD_NUMBER}
+                // docker tag social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:latest
+                // docker push sframir/social-media-scraper:latest
+                // """
             }
             post {
                 always {
@@ -176,8 +183,6 @@ pipeline {
                         sh """
                         docker tag sframir/social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
                         docker push sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
-                        docker tag sframir/social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:latest
-                        docker push sframir/social-media-scraper_frontend:latest
                         """
                         sh """
                         docker stop sframir/social-media-scraper_frontend_${env.BUILD_NUMBER}
