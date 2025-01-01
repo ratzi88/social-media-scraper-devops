@@ -67,7 +67,7 @@ pipeline {
         stage("Docker app build") {
             steps {
                 dir("${env.BUILD_NUMBER}/app/backend") {
-                    sh "docker build -t social-media-scraper:${env.BUILD_NUMBER} ."
+                    sh "docker build -t sframir/social-media-scraper:${env.BUILD_NUMBER} ."
                 }
             }
         }
@@ -111,8 +111,8 @@ pipeline {
                 always {
                     echo "====++++always++++===="
                     sh """
-                    docker stop social-media-scraper_${env.BUILD_NUMBER}
-                    docker rm social-media-scraper_${env.BUILD_NUMBER}
+                    docker stop sframir/social-media-scraper_${env.BUILD_NUMBER}
+                    docker rm sframir/social-media-scraper_${env.BUILD_NUMBER}
                     docker stop mongodb
                     docker rm mongodb
                     """
@@ -125,15 +125,15 @@ pipeline {
         stage("Docker push to Docker Hub") {
             steps {
                 sh """
-                docker tag social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:${env.BUILD_NUMBER}
+                docker tag sframir/social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:${env.BUILD_NUMBER}
                 docker push sframir/social-media-scraper:${env.BUILD_NUMBER}
-                docker tag social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:latest
+                docker tag sframir/social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:latest
                 docker push sframir/social-media-scraper:latest
                 """
             }
             post {
                 always {
-                    sh "docker rmi social-media-scraper:${env.BUILD_NUMBER}"
+                    sh "docker rmi sframir/social-media-scraper:${env.BUILD_NUMBER}"
                 }
             }
         }
@@ -142,7 +142,7 @@ pipeline {
                 script {
                     if (params.build_frontend) {
                         dir("${env.BUILD_NUMBER}/app/frontend") {
-                            sh "docker build -t social-media-scraper_frontend:${env.BUILD_NUMBER} ."
+                            sh "docker build -t sframir/social-media-scraper_frontend:${env.BUILD_NUMBER} ."
                         }
                     } else {
                         echo 'NOT building the frontend docker'
@@ -158,7 +158,7 @@ pipeline {
                             sh """
                             docker run -d -p 3000:80 \
                             --network jenkins_env \
-                            --name social-media-scraper_frontend_${env.BUILD_NUMBER} \
+                            --name sframir/social-media-scraper_frontend_${env.BUILD_NUMBER} \
                             -e MONGO_URI='mongodb://mongodb:27017/social_media' \
                             social-media-scraper_frontend:${env.BUILD_NUMBER}
                             """
@@ -174,16 +174,16 @@ pipeline {
                 script {
                     if (params.build_frontend) {
                         sh """
-                        docker tag social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
+                        docker tag sframir/social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
                         docker push sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}
-                        docker tag social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:latest
+                        docker tag sframir/social-media-scraper_frontend:${env.BUILD_NUMBER} sframir/social-media-scraper_frontend:latest
                         docker push sframir/social-media-scraper_frontend:latest
                         """
                         sh """
-                        docker stop social-media-scraper_frontend_${env.BUILD_NUMBER}
-                        docker rm social-media-scraper_frontend_${env.BUILD_NUMBER}
+                        docker stop sframir/social-media-scraper_frontend_${env.BUILD_NUMBER}
+                        docker rm sframir/social-media-scraper_frontend_${env.BUILD_NUMBER}
                         """
-                        sh "docker rmi social-media-scraper_frontend:${env.BUILD_NUMBER}"
+                        sh "docker rmi sframir/social-media-scraper_frontend:${env.BUILD_NUMBER}"
                     } else {
                         echo 'NOT pushing the frontend docker'
                     }
