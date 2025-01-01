@@ -1,6 +1,19 @@
 pipeline {
     agent any
     stages {
+
+        stage("Setting Jenkins") {
+            steps {
+                echo "========Set jenkins========"
+                sh """
+                grep docker /etc/group
+                sudo usermod -aG docker jenkins
+                sudo chown root:docker /var/run/docker.sock
+                sudo chmod 660 /var/run/docker.sock
+                """
+            }
+        }
+
         stage("Cloning app") {
             steps {
                 echo "========app clone========"

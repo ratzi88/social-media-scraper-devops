@@ -41,8 +41,8 @@ pipeline {
 
                 sh """
                 ssh -i ${PEM_PATH} ubuntu@3.70.39.129 \
-                "kubectl apply -f ${K8S_PATH}/vol-db-pvc.yaml \
-                && kubectl apply -f ${K8S_PATH}/configmap.yaml \
+                "${K8S_APPLY}/vol-db-pvc.yaml \
+                && ${K8S_APPLY}/configmap.yaml \
                 && ${K8S_APPLY}/deployment-db.yaml \
                 && ${K8S_APPLY}/deployment-backend.yaml \
                 && ${K8S_APPLY}/deployment-frontend.yaml \
