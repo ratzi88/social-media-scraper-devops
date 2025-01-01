@@ -77,7 +77,7 @@ pipeline {
                     sh """
                     docker run -d -p 5000:5000 \
                     --network jenkins_env \
-                    --name social-media-scraper_${env.BUILD_NUMBER} \
+                    --name sframir/social-media-scraper_${env.BUILD_NUMBER} \
                     -e MONGO_URI='mongodb://mongodb:27017/social_media' \
                     social-media-scraper:${env.BUILD_NUMBER}
                     """
