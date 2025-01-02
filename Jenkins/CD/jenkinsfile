@@ -34,6 +34,17 @@ pipeline {
                 """
             }
        }
+        stage("delete dockers from ec2") {
+            steps {
+                echo "====++++executing A++++===="
+                sh """
+                ssh -i ${PEM_PATH} ubuntu@3.70.39.129 \
+                "docker images ls \
+                && docker rmi -f sframir/social-media-scraper:latest \
+                && docker rmi -f sframir/social-media-scraper_frontend:latest"
+                """
+            }
+       }
 
         stage("k8s kubectl apply all") {
             steps {
