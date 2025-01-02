@@ -124,6 +124,7 @@ pipeline {
         }
         stage("Docker push to Docker Hub") {
             steps {
+                sh "docker login"
                 sh """
                 docker tag social-media-scraper:${env.BUILD_NUMBER} sframir/social-media-scraper:${env.BUILD_NUMBER}
                 docker push sframir/social-media-scraper:${env.BUILD_NUMBER}
@@ -171,6 +172,7 @@ pipeline {
         }
         stage("Docker frontend push to Docker Hub") {
             steps {
+                sh "docker login"
                 retry(3) {
                 sleep 5
                     script {
