@@ -36,13 +36,17 @@ pipeline {
        }
         stage("delete dockers from ec2") {
             steps {
-                echo "====++++executing A++++===="
-                sh """
-                ssh -i ${PEM_PATH} ubuntu@3.70.39.129 \
-                "docker images ls \
-                && docker rmi -f sframir/social-media-scraper:latest \
-                && docker rmi -f sframir/social-media-scraper_frontend:latest"
-                """
+                catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
+
+                    echo "====++++executing A++++===="
+                    sh """
+                    ssh -i ${PEM_PATH} ubuntu@3.70.39.129 \
+                    "docker image ls \
+                    && docker rmi -f social-media-scraper-backend:latest \
+                    && docker rmi -f sframir/social-media-scraper-frontend:latest \
+                    && docker image ls "
+                    """
+                }
             }
        }
 
