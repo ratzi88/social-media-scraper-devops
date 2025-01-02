@@ -42,8 +42,8 @@ pipeline {
                     sh """
                     ssh -i ${PEM_PATH} ubuntu@3.70.39.129 \
                     "docker image ls \
-                    && docker rmi -f social-media-scraper-backend:latest \
-                    && docker rmi -f sframir/social-media-scraper-frontend:latest \
+                    && docker rmi -f social-media-scraper_backend:latest \
+                    && docker rmi -f sframir/social-media-scraper_frontend:latest \
                     && docker image ls "
                     """
                 }
